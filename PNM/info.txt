@@ -1,0 +1,22 @@
+There are two files in the PNM folder which are 'extract_pore_net.py' and 'calc_abs_perm.py' which would allow you to extract PN (1st file) and calculate absolute permability of the sample (2nd file).
+
+1) Segmented images can be downloaded here: http://people.physics.anu.edu.au/~aps110/network_comparison/#measures
+
+2) When extracting PN models from segmented micro-CT images it is important to specify image resolution which is as follows:
+
+Silica sphere pack - 17.472 micrometers
+Castlegate sandstone - 5.6 micrometers
+Unconsolidated Sand Pack - 9.184 micrometers
+Mt Gambier Limestone - 3.024 
+
+3) The dimensions are 512 x 512 x 512 voxels for all the images which is specified in a separated .txt file
+
+4) .mhd files are created for all the images for ParaView visualisation 
+
+5) Calculated permeability values are as follows:
+
+Castlegate sandstone - 1.42143728e-12 m2
+Silica sphere pack - 6.60867972e-11 m2
+Unconsolidated Sand Pack - 3.65944467e-11 m2
+Mt Gambier Limestone - 2.19280038e-12 m2
+
