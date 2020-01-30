@@ -3,8 +3,8 @@ import os
 import pickle
 
 current_path = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(os.path.join(current_path, '/Users/z5087785/data/projects/tmp/pmeal/OpenPNM/'))
-sys.path.append(os.path.join(current_path, '/Users/z5087785/data/projects/tmp/pmeal/porespy/'))
+sys.path.append(os.path.join(current_path, '/Users/bigelk/data/tmp/pmeal/OpenPNM/'))
+sys.path.append(os.path.join(current_path, '/Users/bigelk/data/tmp/pmeal/porespy/'))
 
 import porespy as ps
 import matplotlib.pyplot as plt
