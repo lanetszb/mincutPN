@@ -22,7 +22,7 @@ import numpy as np
 # This demo project allows to create a pore network using PoreSPY and export it for later usage in OpenPNM
 
 # Load net file produced by PoreSpy into OpenPNM
-net = op.io.Dict.load(f'gambier_limestone.net')
+net = op.io.Dict.load(f'PNTest_1.net')
 
 # Creating network dictionary which stores the required properties
 pn = op.network.GenericNetwork()
@@ -34,7 +34,7 @@ h = pn.check_network_health()
 op.topotools.trim(network=pn, pores=h['trim_pores'])
 
 prj = pn.project
-prj.export_data(filename='gambier_limestone', filetype='vtk')
+prj.export_data(filename='PNTest_1', filetype='vtk')
 
 # permeability calc
 
@@ -76,5 +76,5 @@ print('\n')
 print("Q=", Q)
 
 # Save PN data into CSV file
-op.io.CSV.save(pn, filename='PN_gambier_imestone')
+op.io.CSV.save(pn, filename='PNTest_1')
 
