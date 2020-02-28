@@ -3,8 +3,8 @@ import os
 import pickle
 
 current_path = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(os.path.join(current_path, '/Users/bigelk/data/tmp/pmeal/OpenPNM/'))
-sys.path.append(os.path.join(current_path, '/Users/bigelk/data/tmp/pmeal/porespy/'))
+sys.path.append(os.path.join(current_path, '../../tmp/pmeal/OpenPNM/'))
+sys.path.append(os.path.join(current_path, '../../tmp/pmeal/porespy/'))
 
 import porespy as ps
 import matplotlib.pyplot as plt
@@ -61,8 +61,11 @@ flow.run()
 Lx = sp.amax(pn['pore.coords'][:, 0]) - sp.amin(pn['pore.coords'][:, 0])
 A = Lx * Lx  # Since the network is cubic Lx = Ly = Lz
 
-# Add pore pressure to output file
+# Add pore pressure to output csv file
 pn['pore.pressure'] = flow['pore.pressure']
+
+# Add hydraulic conductance to output csv filr
+pn['throat.hydraulic_conductance'] = water['throat.hydraulic_conductance']
 
 # Calc total flow rate
 Q = flow.rate(pores=pn.pores('left'))
