@@ -6,3 +6,4 @@
 *.vtk
 *.csv
 *.vti
+paraview_params.txt
