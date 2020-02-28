@@ -18,7 +18,6 @@ from porespy.tools import randomize_colors
 
 import numpy as np
 
-
 # This demo project allows to create a pore network using PoreSPY and export it for later usage in OpenPNM
 
 # Load net file produced by PoreSpy into OpenPNM
@@ -34,7 +33,6 @@ h = pn.check_network_health()
 op.topotools.trim(network=pn, pores=h['trim_pores'])
 
 prj = pn.project
-prj.export_data(filename='PNTest_1', filetype='vtk')
 
 # permeability calc
 
@@ -75,6 +73,15 @@ print("K_w = ", K_w)
 print('\n')
 print("Q=", Q)
 
+# Save PN data into VTK file
+prj.export_data(filename='PNTest_1', filetype='vtk')
 # Save PN data into CSV file
 op.io.CSV.save(pn, filename='PNTest_1')
 
+# Find coeffs for paraview draw and output it to file
+throat_radius_min = min(pn['throat.diameter'] / 2)
+max_min_ratio = max(pn['throat.diameter']) / min(pn['throat.diameter'])
+
+with open('paraview_params.txt', 'w') as file:
+    file.write(str(throat_radius_min) + '\n')
+    file.write(str(max_min_ratio) + '\n')
