@@ -5,8 +5,8 @@ import imageio
 import numpy as np
 
 current_path = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(os.path.join(current_path, '/Users/z5087785/data/projects/tmp/pmeal/OpenPNM/'))
-sys.path.append(os.path.join(current_path, '/Users/z5087785/data/projects/tmp/pmeal/porespy/'))
+sys.path.append(os.path.join(current_path, '../../tmp/pmeal/OpenPNM/'))
+sys.path.append(os.path.join(current_path, '../../tmp/pmeal/porespy/'))
 
 import porespy as ps
 import matplotlib.pyplot as plt
@@ -36,9 +36,9 @@ while True:
 
         dims = [300, 300, 300]
         im = ps.generators.blobs(shape=dims, porosity=poro, blobiness=blob)
-        plt.imshow(im[:, :, 99])
-        plt.axis('off')
-        plt.show()
+        # plt.imshow(im[:, :, 99])
+        # plt.axis('off')
+        # plt.show()
 
         # exporing generated image to VTK format
         ps.io.to_vtk(im, path=f'im_{i}', divide=False, downsample=False, voxel_size=1E-6, vox=False)

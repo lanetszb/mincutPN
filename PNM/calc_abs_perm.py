@@ -58,7 +58,7 @@ flow.set_value_BC(pores=pn.pores('right'), values=Pout)
 flow.run()
 
 # Calculate flow length and are
-Lx = sp.amax(pn['pore.coords'][:, 0]) - sp.amin(pn['pore.coords'][:, 0])
+Lx = np.amax(pn['pore.coords'][:, 0]) - np.amin(pn['pore.coords'][:, 0])
 A = Lx * Lx  # Since the network is cubic Lx = Ly = Lz
 
 # Add pore pressure to output csv file
