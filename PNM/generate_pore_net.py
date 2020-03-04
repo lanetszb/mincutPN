@@ -25,10 +25,10 @@ i = int(0)
 while True:
 
     # Random generator of porosity and blobiness based on gaussian distribution
-    poro = random.gauss(0.5, 0.6)
+    poro = random.gauss(0.2, 0.3)
     blob = random.gauss(0.8, 1.5)
 
-    if 0.5 <= poro <= 0.6 and 0.8 <= blob <= 1.5:
+    if 0.18 <= poro <= 0.35 and 1.5 <= blob <= 2.5:
 
         i += 1
         if i == n:
@@ -36,9 +36,9 @@ while True:
 
         dims = [300, 300, 300]
         im = ps.generators.blobs(shape=dims, porosity=poro, blobiness=blob)
-        # plt.imshow(im[:, :, 99])
-        # plt.axis('off')
-        # plt.show()
+        plt.imshow(im[:, :, 99])
+        plt.axis('off')
+        plt.show()
 
         # exporing generated image to VTK format
         ps.io.to_vtk(im, path=f'im_{i}', divide=False, downsample=False, voxel_size=1E-6, vox=False)

@@ -3,6 +3,14 @@
 # To ensure correct image size when batch processing, please search 
 # for and uncomment the line `# renderView*.ViewSize = [*,*]`
 
+import numpy as np
+
+import os
+
+py_path = os.path.dirname(os.path.abspath(__file__))
+
+print(py_path)
+
 #### import the simple module from the paraview
 from paraview.simple import *
 #### disable automatic camera reset on 'Show'
@@ -149,7 +157,7 @@ glyph1Display.PolarAxes.SecondaryRadialAxesTextColor = [0.0, 0.0, 0.0]
 glyph1Display.PolarAxes.SecondaryRadialAxesTextFontFile = ''
 
 # set scalar coloring
-ColorBy(glyph1Display, ('POINTS', 'network | net_01 | properties | pore.diameter'))
+ColorBy(glyph1Display, ('POINTS', 'network | net_01 | properties | pore.pressure'))
 
 # rescale color and/or opacity maps used to include current data range
 glyph1Display.RescaleTransferFunctionToDataRange(True, False)
@@ -494,7 +502,7 @@ Hide(extractSurface1, renderView1)
 renderView1.Update()
 
 # set scalar coloring
-ColorBy(tube1Display, ('POINTS', 'network | net_01 | properties | throat.diameter'))
+ColorBy(tube1Display, ('POINTS', 'network | net_01 | properties | pore.pressure'))
 
 # rescale color and/or opacity maps used to include current data range
 tube1Display.RescaleTransferFunctionToDataRange(True, False)
@@ -510,9 +518,11 @@ networknet_01propertiesthroatdiameterPWF = GetOpacityTransferFunction('networkne
 
 # Properties modified on tube1
 tube1.Scalars = ['POINTS', 'network | net_01 | properties | throat.diameter']
-tube1.Radius = 1e-06
+# paraview_params = np.loadtxt('/Users/bigelk/data/projects/mincutPN/PNM/paraview_params.txt')
+paraview_params = np.loadtxt(py_path + '/paraview_params.txt')
+tube1.Radius = paraview_params[0]
 tube1.VaryRadius = 'By Scalar'
-tube1.RadiusFactor = 30.870698080866262
+tube1.RadiusFactor = paraview_params[1]
 
 # update the view to ensure updated data information
 renderView1.Update()
