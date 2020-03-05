@@ -16,9 +16,8 @@ from porespy.filters import find_peaks, trim_saddle_points, trim_nearby_peaks
 from skimage.morphology import watershed
 from porespy.tools import randomize_colors
 
-from output_funcs import form_pore_data
-from output_funcs import form_throat_data
-from output_funcs import form_boudnary_pores
+from export_network_for_edmonds_karp import export_network_to_csv
+from edmonds_karp import calculate_edmonds_karp
 
 import numpy as np
 
@@ -92,7 +91,8 @@ max_min_ratio = max(pn['throat.diameter']) / min(pn['throat.diameter'])
 with open('paraview_params.txt', 'w') as file:
     file.write(str(throat_radius_min) + '\n')
     file.write(str(max_min_ratio) + '\n')
-    
-form_pore_data(pn)
-form_throat_data(pn, water)
-form_boudnary_pores(pn)    
+
+
+pores, throats = export_network_to_csv(pn, water, save_to_csv=False)
+
+calculate_edmonds_karp(pores, throats)

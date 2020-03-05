@@ -34,11 +34,11 @@ while True:
         if i == n:
             break
 
-        dims = [300, 300, 300]
+        dims = [100, 100, 100]
         im = ps.generators.blobs(shape=dims, porosity=poro, blobiness=blob)
-        plt.imshow(im[:, :, 99])
-        plt.axis('off')
-        plt.show()
+        # plt.imshow(im[:, :, int(dims[0]/2)])
+        # plt.axis('off')
+        # plt.show()
 
         # exporing generated image to VTK format
         ps.io.to_vtk(im, path=f'im_{i}', divide=False, downsample=False, voxel_size=1E-6, vox=False)
