@@ -16,6 +16,10 @@ from porespy.filters import find_peaks, trim_saddle_points, trim_nearby_peaks
 from skimage.morphology import watershed
 from porespy.tools import randomize_colors
 
+from output_funcs import form_pore_data
+from output_funcs import form_throat_data
+from output_funcs import form_boudnary_pores
+
 import numpy as np
 
 # This demo project allows to create a pore network using PoreSPY and export it for later usage in OpenPNM
@@ -88,3 +92,7 @@ max_min_ratio = max(pn['throat.diameter']) / min(pn['throat.diameter'])
 with open('paraview_params.txt', 'w') as file:
     file.write(str(throat_radius_min) + '\n')
     file.write(str(max_min_ratio) + '\n')
+    
+form_pore_data(pn)
+form_throat_data(pn, water)
+form_boudnary_pores(pn)    
