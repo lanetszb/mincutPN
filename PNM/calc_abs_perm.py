@@ -53,6 +53,7 @@ water['throat.viscosity'] = viscosity
 # In/out pressures
 Pout = 101325
 Pin = 2 * Pout
+dP = Pin - Pout
 
 # Specifying boundary conditions and run the solver
 flow = op.algorithms.StokesFlow(network=pn, phase=water)
@@ -64,6 +65,7 @@ flow.run()
 
 # Calculate flow length and are
 Lx = np.amax(pn['pore.coords'][:, 0]) - np.amin(pn['pore.coords'][:, 0])
+L = Lx
 A = Lx * Lx  # Since the network is cubic Lx = Ly = Lz
 
 # Add pore pressure to output csv file
@@ -78,7 +80,7 @@ Q = flow.rate(pores=pn.pores('left'))[0]
 # Calc permeability and output permeability and flow rate
 K_pnm = flow.calc_effective_permeability(domain_area=A, domain_length=Lx)[0]
 print("K_pnm", K_pnm)
-print("Q", Q)
+print("Q_pnm", Q)
 
 # Save PN data into VTK file
 prj.export_data(filename='PNTest_1', filetype='vtk')
@@ -96,4 +98,4 @@ with open('paraview_params.txt', 'w') as file:
 
 pores, throats = export_network_to_csv(pn, water, key_left, key_right, save_to_csv=False)
 
-R = calculate_edmonds_karp(pores, throats, viscosity, A)
+R = calculate_edmonds_karp(pores, throats, viscosity, A, dP, L)
