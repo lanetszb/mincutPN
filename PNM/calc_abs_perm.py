@@ -43,9 +43,9 @@ prj = pn.project
 water = op.phases.Water(network=pn)
 water.add_model(propname='throat.hydraulic_conductance',
                 model=op.models.physics.hydraulic_conductance.hagen_poiseuille)
-
-water['pore.viscosity'] = 10e-4
-water['throat.viscosity'] = 10e-4
+viscosity = 10e-4
+water['pore.viscosity'] = viscosity
+water['throat.viscosity'] = viscosity
 
 # Option to calculate hydraulic conductance manually
 # water['throat.hydraulic_conductance'] = np.pi * R ** 4 / (8 * mu_w * L)
@@ -56,8 +56,10 @@ Pin = 2 * Pout
 
 # Specifying boundary conditions and run the solver
 flow = op.algorithms.StokesFlow(network=pn, phase=water)
-flow.set_value_BC(pores=pn.pores('left'), values=Pin)
-flow.set_value_BC(pores=pn.pores('right'), values=Pout)
+key_left = 'left'
+key_right = 'right'
+flow.set_value_BC(pores=pn.pores(key_left), values=Pin)
+flow.set_value_BC(pores=pn.pores(key_right), values=Pout)
 flow.run()
 
 # Calculate flow length and are
@@ -93,6 +95,6 @@ with open('paraview_params.txt', 'w') as file:
     file.write(str(max_min_ratio) + '\n')
 
 
-pores, throats = export_network_to_csv(pn, water, save_to_csv=False)
+pores, throats = export_network_to_csv(pn, water, key_left, key_right, save_to_csv=False)
 
-calculate_edmonds_karp(pores, throats)
+R = calculate_edmonds_karp(pores, throats, viscosity)

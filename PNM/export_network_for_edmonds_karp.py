@@ -2,18 +2,15 @@ import numpy as np
 import pandas as pd
 import os
 
-def export_network_to_csv(pore_network, liq_model, save_to_csv=False):
-    pores = pd.DataFrame(columns=['id', 'x', 'y', 'z','x_left','x_right','y_left','y_right','z_left','z_right'])         
+def export_network_to_csv(pore_network, liq_model, key_left, key_right, save_to_csv=False):
+    
+    pores = pd.DataFrame(columns=['id', 'x', 'y', 'z','left','right'])         
     pores.id = pore_network['pore._id']
     pores.x = pore_network['pore.coords'][:,0]
     pores.y = pore_network['pore.coords'][:,1]
     pores.z = pore_network['pore.coords'][:,2]
-    pores.x_left = pore_network['pore.left']
-    pores.x_right = pore_network['pore.right']
-    pores.y_left = pore_network['pore.front']
-    pores.y_right = pore_network['pore.back']
-    pores.z_left = pore_network['pore.top']
-    pores.z_right = pore_network['pore.bottom']
+    pores.left = pore_network['pore.' + key_left]
+    pores.right = pore_network['pore.' + key_right]    
     pores.index = pores.id
     if save_to_csv:
         pores.to_csv('pores.csv', index=False)    
