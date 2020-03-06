@@ -73,13 +73,12 @@ pn['pore.pressure'] = flow['pore.pressure']
 pn['throat.hydraulic_conductance'] = water['throat.hydraulic_conductance']
 
 # Calc total flow rate
-Q = flow.rate(pores=pn.pores('left'))
+Q = flow.rate(pores=pn.pores('left'))[0]
 
 # Calc permeability and output permeability and flow rate
-K_w = flow.calc_effective_permeability(domain_area=A, domain_length=Lx)
-print("K_w = ", K_w)
-print('\n')
-print("Q=", Q)
+K_pnm = flow.calc_effective_permeability(domain_area=A, domain_length=Lx)[0]
+print("K_pnm", K_pnm)
+print("Q", Q)
 
 # Save PN data into VTK file
 prj.export_data(filename='PNTest_1', filetype='vtk')
@@ -97,4 +96,4 @@ with open('paraview_params.txt', 'w') as file:
 
 pores, throats = export_network_to_csv(pn, water, key_left, key_right, save_to_csv=False)
 
-R = calculate_edmonds_karp(pores, throats, viscosity)
+R = calculate_edmonds_karp(pores, throats, viscosity, A)

@@ -7,3 +7,4 @@
 *.csv
 *.vti
 paraview_params.txt
+__pycache__/

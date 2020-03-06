@@ -3,7 +3,7 @@ import networkx as nx
 from networkx.algorithms.flow import edmonds_karp
 
 
-def calculate_edmonds_karp(pores, throats, viscosity):
+def calculate_edmonds_karp(pores, throats, viscosity, A):
     
     edges = list()
     for id in throats.index:
@@ -26,10 +26,10 @@ def calculate_edmonds_karp(pores, throats, viscosity):
     G.add_edges_from(edges)
         
     R = edmonds_karp(G, 'in_a', 'out_b')    
-    print('max_flow', R['in_a']['in_b']['flow'])  
+    print('K_fulk', R['in_a']['in_b']['flow'] / A)  
         
-    nx.draw_networkx(R)
-    plt.show()
+    # nx.draw_networkx(R)
+    # plt.show()
     
     return R
     
