@@ -39,18 +39,33 @@ def calculate_edmonds_karp(pores, throats, viscosity, A, dP, L):
     print('Q_cut', cut_value / A * dP / L)    
 
     reachable, non_reachable = partition
-    cutset = set()
+    
+    cut_set_edges = set()
     for u, nbrs in ((n, G[n]) for n in reachable):
-        cutset.update((u, v) for v in nbrs if v in non_reachable)
+        cut_set_edges.update((u, v) for v in nbrs if v in non_reachable)    
+    
+    all_edges = G.edges()
     
     print()    
-    print('edges_n', len(edges))
-    print('min_cut_edges_n', len(cutset))
+    print('edges_n', len(all_edges))
+    print('min_cut_edges_n', len(cut_set_edges))
+   
     # print()
-    # print('min_cut_edges', sorted(cutset))      
+    # print('all_edges', all_edges)
+   
+    # print()
+    # print('min_cut_edges', sorted(cut_set_edges))
+    
+    color_edges = list()
+    for edge in all_edges:        
+        if edge in cut_set_edges:
+            color_edges.append('r')
+        else:
+            color_edges.append('b')   
+          
         
-    # nx.draw_networkx(R)
-    # plt.show()
+    nx.draw_networkx(G,pos=nx.spring_layout(G),edge_color=color_edges)
+    plt.show()
     
     return R
     
