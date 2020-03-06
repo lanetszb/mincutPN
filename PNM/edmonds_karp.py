@@ -31,7 +31,7 @@ def calculate_edmonds_karp(pores, throats, viscosity, A, dP, L):
     print('Q_fulk', R['in_a']['in_b']['flow'] / A * dP / L)
     
     
-    cut_value, partition = nx.minimum_cut(G, 'in_a', 'out_b')
+    cut_value, partition = nx.minimum_cut(G, 'in_a', 'out_b',flow_func=edmonds_karp)
     reachable, non_reachable = partition
 
     print()
