@@ -28,7 +28,7 @@ def calculate_edmonds_karp(pores, throats, viscosity, A, dP, L):
     R = edmonds_karp(G, 'in_a', 'out_b')
     print()    
     print('K_fulk', R['in_a']['in_b']['flow'] / A)
-    print('Q_fulk', R['in_a']['in_b']['flow'] / A * dP / L)
+    print('Q_fulk', R['in_a']['in_b']['flow'] * dP / L / viscosity)
     
     
     cut_value, partition = nx.minimum_cut(G, 'in_a', 'out_b',flow_func=edmonds_karp)
@@ -36,7 +36,7 @@ def calculate_edmonds_karp(pores, throats, viscosity, A, dP, L):
 
     print()
     print('K_cut', cut_value / A)
-    print('Q_cut', cut_value / A * dP / L)    
+    print('Q_cut', cut_value * dP / L / viscosity)    
 
     reachable, non_reachable = partition
     
@@ -52,7 +52,7 @@ def calculate_edmonds_karp(pores, throats, viscosity, A, dP, L):
    
     # print()
     # print('all_edges', all_edges)
-   
+    # 
     # print()
     # print('min_cut_edges', sorted(cut_set_edges))
     
@@ -64,8 +64,8 @@ def calculate_edmonds_karp(pores, throats, viscosity, A, dP, L):
             color_edges.append('b')   
           
         
-    nx.draw_networkx(G,pos=nx.spring_layout(G),edge_color=color_edges)
-    plt.show()
+    # nx.draw_networkx(G,pos=nx.spring_layout(G),edge_color=color_edges)
+    # plt.show()
     
     return R
     
