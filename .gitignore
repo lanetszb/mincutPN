@@ -6,3 +6,5 @@
 *.vtk
 *.csv
 *.vti
+*.eps
+*.png

@@ -7,4 +7,5 @@
 *.csv
 *.vti
 paraview_params.txt
+min_cut_max_flow.txt
 __pycache__/

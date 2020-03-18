@@ -24,7 +24,7 @@ import numpy as np
 # This demo project allows to create a pore network using PoreSPY and export it for later usage in OpenPNM
 
 # Load net file produced by PoreSpy into OpenPNM
-net = op.io.Dict.load(f'PNTest_1.net')
+net = op.io.Dict.load(f'out/uncons_bead_pack.net')
 
 # Creating network dictionary which stores the required properties
 pn = op.network.GenericNetwork()
@@ -68,6 +68,9 @@ Lx = np.amax(pn['pore.coords'][:, 0]) - np.amin(pn['pore.coords'][:, 0])
 L = Lx
 A = Lx * Lx  # Since the network is cubic Lx = Ly = Lz
 
+print('Lx= ', Lx)
+print('\n')
+
 # Add pore pressure to output csv file
 pn['pore.pressure'] = flow['pore.pressure']
 
@@ -83,9 +86,9 @@ print("K_pnm", K_pnm)
 print("Q_pnm", Q)
 
 # Save PN data into VTK file
-prj.export_data(filename='PNTest_1', filetype='vtk')
+# prj.export_data(filename='PNTest_1', filetype='vtk')
 # Save PN data into CSV file
-op.io.CSV.save(pn, filename='PNTest_1')
+# op.io.CSV.save(pn, filename='PNTest_1')
 
 # Find coeffs for paraview draw and output it to file
 throat_radius_min = min(pn['throat.diameter'] / 2)
@@ -99,3 +102,6 @@ with open('paraview_params.txt', 'w') as file:
 pores, throats = export_network_to_csv(pn, water, key_left, key_right, save_to_csv=False)
 
 R = calculate_edmonds_karp(pores, throats, viscosity, A, dP, L)
+
+K_fulk = R['in_a']['in_b']['flow'] / A
+Q_fulk = R['in_a']['in_b']['flow'] * dP / L / viscosity
