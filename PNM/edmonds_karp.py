@@ -26,12 +26,13 @@ def calculate_edmonds_karp(pores, throats, viscosity, A, dP, L):
     G.add_edges_from(edges)
         
     R = edmonds_karp(G, 'in_a', 'out_b')
-    print()    
+    print()  
     print('K_fulk', R['in_a']['in_b']['flow'] / A)
     print('Q_fulk', R['in_a']['in_b']['flow'] * dP / L / viscosity)
     
     
-    cut_value, partition = nx.minimum_cut(G, 'in_a', 'out_b',flow_func=edmonds_karp)
+    # cut_value, partition = nx.minimum_cut(G, 'in_a', 'out_b',flow_func=edmonds_karp)
+    cut_value, partition = nx.minimum_cut(G, 'in_a', 'out_b')
     reachable, non_reachable = partition
 
     print()
@@ -65,8 +66,18 @@ def calculate_edmonds_karp(pores, throats, viscosity, A, dP, L):
           
         
     # nx.draw_networkx(G,pos=nx.spring_layout(G),edge_color=color_edges)
-    # plt.show()
+ #    plt.show()
+    
+    edges_n = len(all_edges)
+    min_cut_edges_n = len(cut_set_edges)
+    
+    file_perm = open('min_cut_max_flow.txt', 'w')
+
+    with file_perm as file:
+        file.write('edges_n' + 'min_cut_edges_n' + '\n')
+        file.write(str(edges_n) + ',' + str(min_cut_edges_n) + '\n')
     
     return R
     
+    Hagen-Poissels
 
