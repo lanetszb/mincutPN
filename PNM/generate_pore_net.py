@@ -16,6 +16,8 @@ import openpnm as op
 from porespy.filters import find_peaks, trim_saddle_points, trim_nearby_peaks
 from skimage.morphology import watershed
 
+import random
+
 from porespy.tools import randomize_colors
 
 from calc_abs_perm_func import calculate_abs_perm
@@ -25,7 +27,7 @@ from calc_abs_perm_func import calculate_abs_perm
 with open('perm_comparison.csv', 'w') as file:
     file.write('Porosity,' + 'K_pnm,' + 'Q_pnm,' + 'K_fulk,' + 'Q_fulk' + '\n')
 
-    n = 10
+    n = 500
     i = int(-1)
 
     while True:
@@ -33,6 +35,9 @@ with open('perm_comparison.csv', 'w') as file:
         # Random generator of porosity and blobiness based on gaussian distribution
         poro = random.gauss(0.15, 0.45)
         blob = random.gauss(0.6, 2.2)
+        voxel_list = [1.E-5, 4.E-5]
+        
+        voxel_size = random.choice(voxel_list)
 
         if 0.15 <= poro <= 0.35 and 0.6 <= blob <= 2.2:
 
@@ -49,7 +54,7 @@ with open('perm_comparison.csv', 'w') as file:
             # exporing generated image to VTK format
             # ps.io.to_vtk(im, path=f'im_{i}', divide=False, downsample=False, voxel_size=1E-6, vox=False)
 
-            net = ps.networks.snow(im, voxel_size=1.E-5)
+            net = ps.networks.snow(im, voxel_size=voxel_size)
 
             # exporting pore network from generated image
             # ps.io.to_openpnm(net, filename=f'PNTest_{i}')
