@@ -15,6 +15,7 @@ import openpnm as op
 from porespy.filters import find_peaks, trim_saddle_points, trim_nearby_peaks
 from skimage.morphology import watershed
 from porespy.tools import randomize_colors
+from math import pi
 
 from export_network_for_edmonds_karp import export_network_to_csv
 from edmonds_karp import calculate_edmonds_karp
@@ -48,7 +49,9 @@ water['pore.viscosity'] = viscosity
 water['throat.viscosity'] = viscosity
 
 # Option to calculate hydraulic conductance manually
-# water['throat.hydraulic_conductance'] = np.pi * R ** 4 / (8 * mu_w * L)
+
+
+water['throat.hydraulic_conductance'] = np.pi * pn['throat.diameter']**4 / (128 * viscosity * pn['throat.total_length'])
 
 # In/out pressures
 Pout = 101325
@@ -90,15 +93,15 @@ print("Q_pnm", Q)
 # Save PN data into CSV file
 # op.io.CSV.save(pn, filename='PNTest_1')
 
-# Find coeffs for paraview draw and output it to file
-throat_radius_min = min(pn['throat.diameter'] / 2)
-max_min_ratio = max(pn['throat.diameter']) / min(pn['throat.diameter'])
-
-with open('paraview_params.txt', 'w') as file:
-    file.write(str(throat_radius_min) + '\n')
-    file.write(str(max_min_ratio) + '\n')
-
-
+# # Find coeffs for paraview draw and output it to file
+# throat_radius_min = min(pn['throat.diameter'] / 2)
+# max_min_ratio = max(pn['throat.diameter']) / min(pn['throat.diameter'])
+#
+# with open('paraview_params.txt', 'w') as file:
+#     file.write(str(throat_radius_min) + '\n')
+#     file.write(str(max_min_ratio) + '\n')
+#
+#
 pores, throats = export_network_to_csv(pn, water, key_left, key_right, save_to_csv=False)
 
 R = calculate_edmonds_karp(pores, throats, viscosity, A, dP, L)

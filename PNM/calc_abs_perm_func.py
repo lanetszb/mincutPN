@@ -45,9 +45,14 @@ def calculate_abs_perm(net):
     water = op.phases.Water(network=pn)
     water.add_model(propname='throat.hydraulic_conductance',
                     model=op.models.physics.hydraulic_conductance.hagen_poiseuille)
+                    
+    
+                
     viscosity = 10e-4
     water['pore.viscosity'] = viscosity
     water['throat.viscosity'] = viscosity
+    
+    water['throat.hydraulic_conductance'] = np.pi * pn['throat.diameter']**4 / (128 * viscosity * pn['throat.total_length'])    
 
     # Option to calculate hydraulic conductance manually
     # water['throat.hydraulic_conductance'] = np.pi * R ** 4 / (8 * mu_w * L)
