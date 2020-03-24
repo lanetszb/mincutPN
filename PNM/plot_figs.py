@@ -19,34 +19,33 @@ def implement_filter(table, threshold, remove_rate):
 
     return table.drop(drop_indices)
 
-df = implement_filter(df, 3.e-12, 0.5)
-df = implement_filter(df, 1.e-12, 0.7)
-df = implement_filter(df, 5.e-12, 0.3)
+df = implement_filter(df, 1.e-10, 0.6)
 
 # Plot 1
 ax1 = df.plot(x='k_pnm', y='k_edm', figsize=(fig_width, fig_width), style='o', label = 'Artificial', legend=False, zorder=1)
 
 k_min = 5.e-14
-k_max = 1.25e-11
+k_max = 5.e-10
                                     
                          
 ax1.set_xlim(k_min, k_max)                                                                                        
 ax1.set_ylim(k_min,k_max)                                                                         
                       
 ax1.set_xlabel("$k_{pnm}$")     
-ax1.set_ylabel("$k_{edm}$")                                                                        
-                     
+ax1.set_ylabel("$k_{edm}$")
 
-                  
 plt.gca().set_aspect('equal', adjustable='box')                                                        
 plt.plot([k_min,k_max], [k_min,k_max])     
 
-# plt.scatter(4.194141E-10, 3.555365E-10, c="r", alpha=1, marker='square', label='Silica', zorder=2)    
-plt.scatter(2.298116E-13, 1.889883E-13, c="cyan", alpha=1, marker='s', label='Castle',zorder=2, s = 50)    
-plt.scatter(3.622896E-12, 1.487646E-12, c="m", alpha=1, marker='s', label='Gambier', zorder=2, s = 50)       
-plt.scatter(1.067776E-11, 1.013048E-11, c="r", alpha=1, marker='s', label='Bead Pack', zorder=2, s = 50)    
+plt.scatter(4.194141E-10, 3.555365E-10, c="y", marker='s', label='Silica', zorder=2, s = 50)    
+plt.scatter(2.298116E-13, 1.889883E-13, c="cyan", marker='s', label='Castle',zorder=2, s = 50)    
+plt.scatter(3.622896E-12, 1.487646E-12, c="m", marker='s', label='Gambier', zorder=2, s = 50)       
+plt.scatter(1.067776E-11, 1.013048E-11, c="r", marker='s', label='Bead Pack', zorder=2, s = 50)    
     
-plt.legend()  
+plt.legend(fancybox=True, framealpha=1)  
+
+plt.yscale("log")
+plt.xscale("log")
   
 plt.savefig("k_pnm_edm.eps", format="eps", bbox_inches = 'tight')  
                                                                                              
@@ -63,22 +62,20 @@ mean_err = df.error_rel.mean()
 plt.plot([k_min,k_max], [mean_err,mean_err])
                                                                                                                            
 ax2.set_xlim(k_min,k_max)    
-ax2.set_ylim(-0.3,0.8)      
+ax2.set_ylim(-1,1)      
       
 ax2.set_xlabel("$k_{pnm}$")     
 ax2.set_ylabel("Relative error")                                   
 
-# plt.scatter(4.194141E-10, (4.194141E-10 - 3.555365E-10) / 4.194141E-10, c="r", alpha=1, marker='square', label='Silica', zorder=2)    
-plt.scatter(2.298116E-13, (2.298116E-13 - 1.889883E-13) / 2.298116E-13, c="cyan", alpha=1, marker='s', label='Castle', zorder=2, s = 50)    
-plt.scatter(3.622896E-12, (3.622896E-12 - 1.487646E-12) / 3.622896E-12, c="m", alpha=1, marker='s', label='Gambier', zorder=2, s = 50)       
-plt.scatter(1.067776E-11, (1.067776E-11 - 1.013048E-11) / 1.067776E-11, c="r", alpha=1, marker='s', label='Bead Pack', zorder=2, s = 50)  
+plt.scatter(1.067776E-11, (1.067776E-11 - 1.013048E-11) / 1.067776E-11, c="r", marker='s', label='Bead Pack', zorder=2, s = 50)   
+plt.scatter(2.298116E-13, (2.298116E-13 - 1.889883E-13) / 2.298116E-13, c="cyan", marker='s', label='Castle', zorder=2, s = 50)    
+plt.scatter(3.622896E-12, (3.622896E-12 - 1.487646E-12) / 3.622896E-12, c="m", marker='s', label='Gambier', zorder=2, s = 50)
+plt.scatter(4.194141E-10, (4.194141E-10 - 3.555365E-10) / 4.194141E-10, c="y", marker='s', label='Silica', zorder=2, s = 50) 
 
-plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
-       ncol=2, mode="expand", borderaxespad=0.)
+plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3, ncol=3, mode="expand", borderaxespad=0.,fancybox=True, framealpha=1)
                                            
-                                                                                          
+plt.xscale("log") 
 
- 
 plt.savefig("error_rel.eps", format="eps", bbox_inches = 'tight')  
                                                                                               
 plt.show() 
