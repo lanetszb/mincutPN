@@ -45,13 +45,13 @@ with open('out/perm_comparison.csv', 'w') as file:
             net = ps.networks.snow(im, voxel_size=voxel_size)
 
             # exporting pore network from generated image
-            # ps.io.to_openpnm(net, filename=f'out/pn_{i}')
+            ps.io.to_openpnm(net, filename=f'out/pn_{i}')
 
             # calculate permeability
-            flow = calculate_perm(net, pn_name=f'out/pn_{i}')
+            flow_params, min_cut_edges_id = calculate_perm(net, pn_name=f'out/pn_{i}')
 
-            file.write(str(poro) + ',' + str(flow[0]) + ',' + str(flow[1]) + ','
-                       + str(flow[2]) + ',' + str(flow[3]) + '\n')
+            file.write(str(poro) + ',' + str(flow_params[0]) + ',' + str(flow_params[1]) + ','
+                       + str(flow_params[2]) + ',' + str(flow_params[3]) + '\n')
             print()
             print('i', i)
 

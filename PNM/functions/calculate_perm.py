@@ -96,4 +96,4 @@ def calculate_perm(net, pn_name='pn'):
 
     flow_params = np.array([K_pnm, Q_pnm, K_edm, Q_edm])
 
-    return flow_params
+    return flow_params, min_cut_edges_id
