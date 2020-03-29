@@ -91,11 +91,12 @@ def calculate_perm(net, pn_name='pn'):
     pores, throats = edmonds_karp_export(pn, water, key_left, key_right,
                                          save_to_csv=False)
 
-    R, min_cut_edges_id = calculate_edmonds_karp(pores, throats, viscosity, A, dP, L)
+    R, min_cut_edges_id, min_cut_radii = calculate_edmonds_karp(pores, throats, viscosity,
+                                                                A, dP, L)
 
     K_edm = R['in_a']['in_b']['flow'] / A
     Q_edm = R['in_a']['in_b']['flow'] * dP / L / viscosity
 
     flow_params = np.array([K_pnm, Q_pnm, K_edm, Q_edm])
 
-    return flow_params, min_cut_edges_id
+    return flow_params, min_cut_edges_id, min_cut_radii

@@ -14,13 +14,15 @@ def edmonds_karp_export(pore_network, liq_model, key_left, key_right, save_to_cs
     if save_to_csv:
         pores.to_csv('pores.csv', index=False)
 
-    throats = pd.DataFrame(columns=['id', 'pore_a', 'pore_b', 'conductance', 'length'])
+    throats = pd.DataFrame(
+        columns=['id', 'pore_a', 'pore_b', 'conductance', 'length', 'radius'])
     throats.id = np.arange(len(pore_network['throat.conns']))
     throats.pore_a = pore_network['throat.conns'][:, 0]
     throats.pore_b = pore_network['throat.conns'][:, 1]
     throats.conductance = liq_model['throat.hydraulic_conductance']
     throats.index = throats.id
     throats.length = pore_network['throat.total_length']
+    throats.radius = pore_network['throat.diameter'] / 2.
     if save_to_csv:
         throats.to_csv('throats.csv', index=False)
 

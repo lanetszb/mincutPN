@@ -56,20 +56,20 @@ def read_raw_file(base_path, mhd_file_name):
 
     case_name = os.path.splitext(os.path.basename(raw_file_name))[0]
 
-    return image, voxel_sizes, case_name
+    return image, dims, voxel_sizes, case_name
 
 
 def extract_pn(image, voxel_size, case_name):
     # Runs pore network extraction algorithm
     net = ps.networks.snow(image, voxel_size=voxel_size)
     # Exporting network for openpnm
-    ps.io.to_openpnm(net, filename='out/' + case_name)
+    # ps.io.to_openpnm(net, filename='out/' + case_name)
 
     return net
 
 
 if __name__ == '__main__':
-    im, voxel_sizes, case_name = read_raw_file('samples', 'gambier_512.mhd')
+    im, dims, voxel_sizes, case_name = read_raw_file('samples', 'gambier_512.mhd')
 
     voxel_size = voxel_sizes[0]
 

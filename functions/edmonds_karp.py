@@ -33,8 +33,8 @@ def calculate_edmonds_karp(pores, throats, viscosity, A, dP, L):
 
     R = edmonds_karp(G, 'in_a', 'out_b')
     print()
-    print('K_fulk', R['in_a']['in_b']['flow'] / A)
-    print('Q_fulk', R['in_a']['in_b']['flow'] * dP / L / viscosity)
+    print('K_edm', R['in_a']['in_b']['flow'] / A)
+    print('Q_edm', R['in_a']['in_b']['flow'] * dP / L / viscosity)
 
     # cut_value, partition = nx.minimum_cut(G, 'in_a', 'out_b',flow_func=edmonds_karp)
     cut_value, partition = nx.minimum_cut(G, 'in_a', 'out_b')
@@ -52,7 +52,7 @@ def calculate_edmonds_karp(pores, throats, viscosity, A, dP, L):
 
     min_cut_edges_id = list()
     for node_pair in min_cut_node_pairs:
-        min_cut_edges_id.append(G.adj[node_pair[0]][node_pair[1]]['id'])
+        min_cut_edges_id.append(int(G.adj[node_pair[0]][node_pair[1]]['id']))
 
     all_edges = G.edges()
 
@@ -79,8 +79,10 @@ def calculate_edmonds_karp(pores, throats, viscosity, A, dP, L):
     edges_n = len(all_edges)
     min_cut_edges_n = len(min_cut_node_pairs)
 
-    with open('out/min_cut_max_flow.txt', 'w') as file:
-        file.write('edges_n, min_cut_edges_n\n')
-        file.write(str(edges_n) + ', ' + str(min_cut_edges_n) + '\n')
+    # with open('out/min_cut_max_flow.txt', 'w') as file:
+    #     file.write('edges_n, min_cut_edges_n\n')
+    #     file.write(str(edges_n) + ', ' + str(min_cut_edges_n) + '\n')
 
-    return R, min_cut_edges_id
+    min_cut_radii = throats.loc[min_cut_edges_id, 'radius']
+
+    return R, min_cut_edges_id, min_cut_radii
