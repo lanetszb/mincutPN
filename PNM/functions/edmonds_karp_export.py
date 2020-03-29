@@ -4,8 +4,6 @@ import pandas as pd
 
 def edmonds_karp_export(pore_network, liq_model, key_left, key_right, save_to_csv=False):
     pores = pd.DataFrame(columns=['id', 'x', 'y', 'z', 'left', 'right'])
-    # pores.id = pore_network['pore._id']         
-    # pores.id = pore_network['pore.label']
     pores.id = np.arange(len(pore_network['pore.coords']))
     pores.x = pore_network['pore.coords'][:, 0]
     pores.y = pore_network['pore.coords'][:, 1]
@@ -18,7 +16,6 @@ def edmonds_karp_export(pore_network, liq_model, key_left, key_right, save_to_cs
 
     throats = pd.DataFrame(columns=['id', 'pore_a', 'pore_b', 'conductance', 'length'])
     throats.id = np.arange(len(pore_network['throat.conns']))
-    # throats.id = pore_network['throat._id']
     throats.pore_a = pore_network['throat.conns'][:, 0]
     throats.pore_b = pore_network['throat.conns'][:, 1]
     throats.conductance = liq_model['throat.hydraulic_conductance']
