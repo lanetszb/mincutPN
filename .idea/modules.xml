@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/PNM.iml" filepath="$PROJECT_DIR$/.idea/PNM.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/mincutPN.iml" filepath="$PROJECT_DIR$/.idea/mincutPN.iml" />
     </modules>
   </component>
 </project>
