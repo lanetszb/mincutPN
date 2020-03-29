@@ -6,11 +6,11 @@
 *.vtk
 *.csv
 *.vti
-<<<<<<< HEAD
 paraview_params.txt
 min_cut_max_flow.txt
 __pycache__/
-=======
 *.eps
 *.png
->>>>>>> zak_fork
+.idea
+*.npy
+.idea

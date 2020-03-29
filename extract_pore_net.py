@@ -1,25 +1,19 @@
 import sys
 import os
-import pickle
 
 current_path = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(os.path.join(current_path, '/Users/bigelk/data/tmp/pmeal/OpenPNM/'))
-sys.path.append(os.path.join(current_path, '/Users/bigelk/data/tmp/pmeal/porespy/'))
+sys.path.append(os.path.join(current_path, '../tmp/pmeal/OpenPNM/'))
+sys.path.append(os.path.join(current_path, '../tmp/pmeal/porespy/'))
 
 import porespy as ps
 import matplotlib.pyplot as plt
 import imageio
 import scipy as sp
-import scipy.ndimage as spim
-import openpnm as op
-from porespy.filters import find_peaks, trim_saddle_points, trim_nearby_peaks
-from skimage.morphology import watershed
-from porespy.tools import randomize_colors
-
 import numpy as np
 
 
-# This demo project allows to create a pore network using PoreSPY and export it for later usage in OpenPNM
+# This demo project allows to create a pore network using PoreSPY
+# and export it for later usage in OpenPNM
 
 # This function allows exporting and processing segmenting image from .raw file
 
@@ -50,8 +44,8 @@ def flip_values(data, val1, val2):
     return data
 
 
-# im_dat = read_dat_file('Berea.dat')
-im = read_raw_file('segmented_Gambier_512.raw')
+# im = read_raw_file('samples/segmented_Gambier_512.raw')
+im = np.load('out/im_0.npy')
 
 # Plots one layer of the image in 2D
 plt.imshow(im[0])
@@ -63,9 +57,11 @@ im = flip_values(im, 0, 1).astype(bool)
 net = ps.networks.snow(im, voxel_size=3.024e-6)
 
 # Exporting network for openpnm
-ps.io.to_openpnm(net, filename='gambier_limestone')
+# ps.io.to_openpnm(net, filename='out/pn_gambier')
+ps.io.to_openpnm(net, filename='out/pn_0')
 
-# Opportunity to graphically match segmented image and produced PN (does not seem to work properly)
+# Opportunity to graphically match segmented image and produced PN
+# (does not seem to work properly)
 
-# im = ps.tools.align_image_with_openpnm(im)
-# imageio.mimsave('extracted_network.tif', sp.array(im, dtype=np.int32))
+im = ps.tools.align_image_with_openpnm(im)
+imageio.mimsave('out/extracted_network.tif', sp.array(im, dtype=np.int32))

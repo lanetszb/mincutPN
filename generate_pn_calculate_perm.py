@@ -1,11 +1,12 @@
 import sys
 import os
 import random
+import numpy as np
 import matplotlib.pyplot as plt
 
 current_path = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(os.path.join(current_path, '../../tmp/pmeal/OpenPNM/'))
-sys.path.append(os.path.join(current_path, '../../tmp/pmeal/porespy/'))
+sys.path.append(os.path.join(current_path, '../tmp/pmeal/OpenPNM/'))
+sys.path.append(os.path.join(current_path, '../tmp/pmeal/porespy/'))
 
 import porespy as ps
 from functions.calculate_perm import calculate_perm
@@ -23,7 +24,7 @@ with open('out/perm_comparison.csv', 'w') as file:
 
     while True:
 
-        # Random generator of porosity and blobiness based on gaussian distribution
+        # Random generator of porosity and blobiness based on gauss
         poro = random.gauss(0.15, 0.45)
         blob = random.gauss(0.6, 2.2)
         voxel_size = random.choice(voxel_list)
@@ -34,12 +35,14 @@ with open('out/perm_comparison.csv', 'w') as file:
                 break
 
             im = ps.generators.blobs(shape=dims, porosity=poro, blobiness=blob)
+            np.save(f'out/im_{i}', im)
             # plt.imshow(im[:, :, int(dims[0] / 2)])
             # plt.axis('off')
             # plt.show()
 
             # exporting generated image to VTK format
-            # ps.io.to_vtk(im, path=f'out/im_{i}', divide=False, downsample=False, voxel_size=1E-6, vox=False)
+            ps.io.to_vtk(im, path=f'out/im_{i}', divide=False,
+                         downsample=False, voxel_size=1E-6, vox=False)
 
             # extract pore network using snow algorithm
             net = ps.networks.snow(im, voxel_size=voxel_size)
@@ -48,9 +51,11 @@ with open('out/perm_comparison.csv', 'w') as file:
             ps.io.to_openpnm(net, filename=f'out/pn_{i}')
 
             # calculate permeability
-            flow_params, min_cut_edges_id = calculate_perm(net, pn_name=f'out/pn_{i}')
+            flow_params, min_cut_edges_id = calculate_perm(net,
+                                                           pn_name=f'out/pn_{i}')
 
-            file.write(str(poro) + ',' + str(flow_params[0]) + ',' + str(flow_params[1]) + ','
+            file.write(str(poro) + ',' + str(flow_params[0]) + ',' + str(
+                flow_params[1]) + ','
                        + str(flow_params[2]) + ',' + str(flow_params[3]) + '\n')
             print()
             print('i', i)
