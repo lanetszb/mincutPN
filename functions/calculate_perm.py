@@ -2,8 +2,9 @@ import sys
 import os
 
 current_path = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(os.path.join(current_path, '../tmp/pmeal/OpenPNM/'))
-sys.path.append(os.path.join(current_path, '../tmp/pmeal/porespy/'))
+sys.path.append(os.path.join(current_path, '../'))
+sys.path.append(os.path.join(current_path, '../../tmp/pmeal/OpenPNM/'))
+sys.path.append(os.path.join(current_path, '../../tmp/pmeal/porespy/'))
 
 import openpnm as op
 
@@ -87,7 +88,8 @@ def calculate_perm(net, pn_name='pn'):
         file.write(str(throat_radius_min) + '\n')
         file.write(str(max_min_ratio) + '\n')
 
-    pores, throats = edmonds_karp_export(pn, water, key_left, key_right, save_to_csv=False)
+    pores, throats = edmonds_karp_export(pn, water, key_left, key_right,
+                                         save_to_csv=False)
 
     R, min_cut_edges_id = calculate_edmonds_karp(pores, throats, viscosity, A, dP, L)
 

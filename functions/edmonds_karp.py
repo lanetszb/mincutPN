@@ -1,3 +1,9 @@
+import sys
+import os
+
+current_path = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(os.path.join(current_path, '../'))
+
 import matplotlib.pyplot as plt
 import networkx as nx
 from networkx.algorithms.flow import edmonds_karp
@@ -7,7 +13,8 @@ def calculate_edmonds_karp(pores, throats, viscosity, A, dP, L):
     edges = list()
     for id in throats.index:
         edges.append((throats.loc[id, 'pore_a'], throats.loc[id, 'pore_b'],
-                      {'capacity': throats.loc[id, 'conductance'] * throats.loc[id, 'length'] * viscosity, 'id': id}))
+                      {'capacity': throats.loc[id, 'conductance'] * throats.loc[
+                          id, 'length'] * viscosity, 'id': id}))
 
     pores_in = pores.left
     pores_in = pores_in[pores_in]
@@ -72,10 +79,8 @@ def calculate_edmonds_karp(pores, throats, viscosity, A, dP, L):
     edges_n = len(all_edges)
     min_cut_edges_n = len(min_cut_node_pairs)
 
-    file_perm = open('out/min_cut_max_flow.txt', 'w')
-
-    with file_perm as file:
-        file.write('edges_n' + 'min_cut_edges_n' + '\n')
-        file.write(str(edges_n) + ',' + str(min_cut_edges_n) + '\n')
+    with open('out/min_cut_max_flow.txt', 'w') as file:
+        file.write('edges_n, min_cut_edges_n\n')
+        file.write(str(edges_n) + ', ' + str(min_cut_edges_n) + '\n')
 
     return R, min_cut_edges_id
