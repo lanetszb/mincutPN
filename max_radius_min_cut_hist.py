@@ -31,4 +31,5 @@ for hdm_file_name in hdm_file_names:
     input_output_im = np.zeros_like(im, dtype=int)
     input_output_im[0, :, :] = im[0, :, :]
     input_output_im[dims[0] - 1, :, :] = im[dims[0] - 1, :, :] * 2
-    result = calculate_max_radius(im, voxel_size, input_output_im)
+    result = calculate_max_radius(im, voxel_size, input_output_im,
+                                  base_path_out + '/' + case_name + '_max_radius.txt')
