@@ -34,18 +34,18 @@ with open('out/perm_comparison.csv', 'w') as file:
                 break
 
             im = ps.generators.blobs(shape=dims, porosity=poro, blobiness=blob)
-            plt.imshow(im[:, :, int(dims[0] / 2)])
-            plt.axis('off')
-            plt.show()
+            # plt.imshow(im[:, :, int(dims[0] / 2)])
+            # plt.axis('off')
+            # plt.show()
 
             # exporting generated image to VTK format
-            ps.io.to_vtk(im, path=f'out/im_{i}', divide=False, downsample=False, voxel_size=1E-6, vox=False)
+            # ps.io.to_vtk(im, path=f'out/im_{i}', divide=False, downsample=False, voxel_size=1E-6, vox=False)
 
             # extract pore network using snow algorithm
             net = ps.networks.snow(im, voxel_size=voxel_size)
 
             # exporting pore network from generated image
-            ps.io.to_openpnm(net, filename=f'out/pn_{i}')
+            # ps.io.to_openpnm(net, filename=f'out/pn_{i}')
 
             # calculate permeability
             flow = calculate_perm(net, pn_name=f'out/pn_{i}')

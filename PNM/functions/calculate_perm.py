@@ -74,10 +74,10 @@ def calculate_perm(net, pn_name='pn'):
     print("Q_pnm", Q_pnm)
 
     # Save PN data into VTK file
-    prj = pn.project
-    prj.export_data(filename=pn_name, filetype='vtk')
+    # prj = pn.project
+    # prj.export_data(filename=pn_name, filetype='vtk')
     # Save PN data into CSV file
-    op.io.CSV.save(pn, filename=pn_name)
+    # op.io.CSV.save(pn, filename=pn_name)
 
     # Find coeffs for paraview draw and output it to file
     throat_radius_min = min(pn['throat.diameter'] / 2)
@@ -89,7 +89,7 @@ def calculate_perm(net, pn_name='pn'):
 
     pores, throats = edmonds_karp_export(pn, water, key_left, key_right, save_to_csv=False)
 
-    R = calculate_edmonds_karp(pores, throats, viscosity, A, dP, L)
+    R, min_cut_edges_id = calculate_edmonds_karp(pores, throats, viscosity, A, dP, L)
 
     K_edm = R['in_a']['in_b']['flow'] / A
     Q_edm = R['in_a']['in_b']['flow'] * dP / L / viscosity

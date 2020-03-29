@@ -7,7 +7,7 @@ def calculate_edmonds_karp(pores, throats, viscosity, A, dP, L):
     edges = list()
     for id in throats.index:
         edges.append((throats.loc[id, 'pore_a'], throats.loc[id, 'pore_b'],
-                      {'capacity': throats.loc[id, 'conductance'] * throats.loc[id, 'length'] * viscosity}))
+                      {'capacity': throats.loc[id, 'conductance'] * throats.loc[id, 'length'] * viscosity, 'id': id}))
 
     pores_in = pores.left
     pores_in = pores_in[pores_in]
@@ -39,15 +39,19 @@ def calculate_edmonds_karp(pores, throats, viscosity, A, dP, L):
 
     reachable, non_reachable = partition
 
-    cut_set_edges = set()
+    min_cut_node_pairs = set()
     for u, nbrs in ((n, G[n]) for n in reachable):
-        cut_set_edges.update((u, v) for v in nbrs if v in non_reachable)
+        min_cut_node_pairs.update((u, v) for v in nbrs if v in non_reachable)
+
+    min_cut_edges_id = list()
+    for node_pair in min_cut_node_pairs:
+        min_cut_edges_id.append(G.adj[node_pair[0]][node_pair[1]]['id'])
 
     all_edges = G.edges()
 
     print()
     print('edges_n', len(all_edges))
-    print('min_cut_edges_n', len(cut_set_edges))
+    print('min_cut_edges_n', len(min_cut_edges_id))
 
     # print()
     # print('all_edges', all_edges)
@@ -55,18 +59,18 @@ def calculate_edmonds_karp(pores, throats, viscosity, A, dP, L):
     # print()
     # print('min_cut_edges', sorted(cut_set_edges))
 
-    color_edges = list()
-    for edge in all_edges:
-        if edge in cut_set_edges:
-            color_edges.append('r')
-        else:
-            color_edges.append('b')
+    # color_edges = list()
+    # for edge in all_edges:
+    #     if edge in min_cut_node_pairs:
+    #         color_edges.append('r')
+    #     else:
+    #         color_edges.append('b')
 
     # nx.draw_networkx(G,pos=nx.spring_layout(G),edge_color=color_edges)
     # plt.show()
 
     edges_n = len(all_edges)
-    min_cut_edges_n = len(cut_set_edges)
+    min_cut_edges_n = len(min_cut_node_pairs)
 
     file_perm = open('out/min_cut_max_flow.txt', 'w')
 
@@ -74,4 +78,4 @@ def calculate_edmonds_karp(pores, throats, viscosity, A, dP, L):
         file.write('edges_n' + 'min_cut_edges_n' + '\n')
         file.write(str(edges_n) + ',' + str(min_cut_edges_n) + '\n')
 
-    return R
+    return R, min_cut_edges_id
