@@ -51,8 +51,7 @@ with open('out/perm_comparison.csv', 'w') as file:
             ps.io.to_openpnm(net, filename=f'out/pn_{i}')
 
             # calculate permeability
-            flow_params, min_cut_edges_id = calculate_perm(net,
-                                                           pn_name=f'out/pn_{i}')
+            flow_params, min_cut = calculate_perm(net, pn_name=f'out/pn_{i}')
 
             file.write(str(poro) + ',' + str(flow_params[0]) + ',' + str(
                 flow_params[1]) + ','

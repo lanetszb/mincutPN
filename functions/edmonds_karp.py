@@ -83,6 +83,9 @@ def calculate_edmonds_karp(pores, throats, viscosity, A, dP, L):
     #     file.write('edges_n, min_cut_edges_n\n')
     #     file.write(str(edges_n) + ', ' + str(min_cut_edges_n) + '\n')
 
-    min_cut_radii = throats.loc[min_cut_edges_id, 'radius']
+    min_cut = dict()
+    min_cut['id'] = throats.loc[min_cut_edges_id, 'id']
+    min_cut['radius'] = throats.loc[min_cut_edges_id, 'radius']
+    min_cut['velocity'] = throats.loc[min_cut_edges_id, 'velocity']
 
-    return R, min_cut_edges_id, min_cut_radii
+    return R, min_cut

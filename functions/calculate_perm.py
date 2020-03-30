@@ -74,12 +74,17 @@ def calculate_perm(net, pn_name='pn'):
     print("K_pnm", K_pnm)
     print("Q_pnm", Q_pnm)
 
-    print(flow)
+    arias = pn['throat.diameter'] * pn['throat.diameter'] / 4
+    presses = flow['pore.pressure']
+    conducts = pn['throat.hydraulic_conductance']
+    delta_presses = list()
+    for pores in pn['throat.conns']:
+        delta_presses.append(abs(presses[pores[0]] - presses[pores[1]]))
+    pn['throat.velocity'] = np.array(delta_presses) * conducts / arias
 
     # Save PN data into VTK file
     # prj = pn.project
     # prj.export_data(filename=pn_name, filetype='vtk')
-
 
     # Save PN data into CSV file
     # op.io.CSV.save(pn, filename=pn_name)
@@ -95,14 +100,12 @@ def calculate_perm(net, pn_name='pn'):
     pores, throats = edmonds_karp_export(pn, water, key_left, key_right,
                                          save_to_csv=False)
 
-    R, min_cut_edges_id, min_cut_radii = calculate_edmonds_karp(pores, throats, viscosity,
-                                                                A, dP, L)
+    R, min_cut = calculate_edmonds_karp(pores, throats, viscosity, A, dP, L)
 
     # finding which throats in pn correspond to min_cuts
     throats_id = np.arange(len(pn['throat.conns']))
 
-    min_cut_radii = np.array(min_cut_radii)
-    min_cuts_in_net = np.in1d(throats_id, min_cut_edges_id)
+    min_cuts_in_net = np.in1d(throats_id, min_cut['id'])
     min_cuts_in_net = min_cuts_in_net * 1
 
     pn['throat.min_cuts_in_net'] = min_cuts_in_net
@@ -116,4 +119,4 @@ def calculate_perm(net, pn_name='pn'):
 
     flow_params = np.array([K_pnm, Q_pnm, K_edm, Q_edm])
 
-    return flow_params, min_cut_edges_id, min_cut_radii
+    return flow_params, min_cut
