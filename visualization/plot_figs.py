@@ -1,3 +1,9 @@
+import sys
+import os
+
+current_path = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(os.path.join(current_path, '../'))
+
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
@@ -7,7 +13,7 @@ rc('text', usetex=True)
 
 fig_width = 3.5
 
-table = pd.read_csv('perm_comparison_1.csv')
+table = pd.read_csv('../out/perm_comparison_1.csv')
 df = pd.DataFrame(table)
 
 df = df.sort_values(by=['k_pnm'])
@@ -25,8 +31,9 @@ def implement_filter(table, threshold, remove_rate):
 df = implement_filter(df, 1.e-10, 0.6)
 
 # Plot 1
-ax1 = df.plot(x='k_pnm', y='k_edm', figsize=(fig_width, fig_width), style='o',
-              label='Artificial', legend=False, zorder=1)
+fig1, ax1 = plt.subplots(figsize=(fig_width, fig_width), tight_layout=True)
+ax1 = df.plot(x='k_pnm', y='k_edm', style='o', label='artificial', legend=False, zorder=1,
+              ax=ax1)
 
 k_min = 5.e-14
 k_max = 5.e-10
@@ -34,58 +41,55 @@ k_max = 5.e-10
 ax1.set_xlim(k_min, k_max)
 ax1.set_ylim(k_min, k_max)
 
-ax1.set_xlabel("$k_{pnm}$")
-ax1.set_ylabel("$k_{edm}$")
+ax1.set_xlabel('$k_{pnm}, m^2$')
+ax1.set_ylabel('$k_{edm}, m^2$')
 
 plt.gca().set_aspect('equal', adjustable='box')
-plt.plot([k_min, k_max], [k_min, k_max])
+plt.plot([k_min, k_max], [k_min, k_max], label='diagonal')
 
-plt.scatter(4.194141E-10, 3.555365E-10, c="y", marker='s', label='Silica', zorder=2, s=50)
-plt.scatter(2.298116E-13, 1.889883E-13, c="cyan", marker='s', label='Castle', zorder=2,
-            s=50)
-plt.scatter(3.622896E-12, 1.487646E-12, c="m", marker='s', label='Gambier', zorder=2,
-            s=50)
-plt.scatter(1.067776E-11, 1.013048E-11, c="r", marker='s', label='Bead Pack', zorder=2,
-            s=50)
+plt.scatter(1.067776E-11, 1.013048E-11, c="r", marker='s', label='(a)', zorder=2, s=50)
+plt.scatter(2.298116E-13, 1.889883E-13, c="cyan", marker='s', label='(b)', zorder=2, s=50)
+plt.scatter(4.194141E-10, 3.555365E-10, c="y", marker='s', label='(c)', zorder=2, s=50)
+plt.scatter(3.622896E-12, 1.487646E-12, c="m", marker='s', label='(d)', zorder=2, s=50)
 
 plt.legend(fancybox=True, framealpha=1)
 
 plt.yscale("log")
 plt.xscale("log")
 
-plt.savefig('out/k_pnm_edm.eps', format="eps", bbox_inches='tight')
+plt.savefig('../out/k_pnm_edm.eps', format="eps", bbox_inches='tight')
 
 plt.show()
 
 # Plot 2
 df['error_rel'] = (df.k_pnm - df.k_edm) / df.k_pnm
 
-ax2 = df.plot(x='k_pnm', y='error_rel', figsize=(fig_width, fig_width * 1.1), style='o',
-              label='Artificial', legend=True, zorder=1)
+fig2, ax2 = plt.subplots(figsize=(fig_width, fig_width), tight_layout=True)
+df.plot(x='k_pnm', y='error_rel', style='o', label='artificial', legend=False, ax=ax2,
+        zorder=1)
 
 mean_err = df.error_rel.mean()
-plt.plot([k_min, k_max], [mean_err, mean_err])
+plt.plot([k_min, k_max], [mean_err, mean_err], label='average')
 
 ax2.set_xlim(k_min, k_max)
 ax2.set_ylim(-1, 1)
 
-ax2.set_xlabel("$k_{pnm}$")
-ax2.set_ylabel("Relative error")
+ax2.set_xlabel('$k_{pnm}, m^2$')
+ax2.set_ylabel('Relative error')
 
 plt.scatter(1.067776E-11, (1.067776E-11 - 1.013048E-11) / 1.067776E-11, c="r", marker='s',
-            label='Bead Pack', zorder=2, s=50)
+            label='(a)', zorder=2, s=50)
 plt.scatter(2.298116E-13, (2.298116E-13 - 1.889883E-13) / 2.298116E-13, c="cyan",
-            marker='s', label='Castle', zorder=2, s=50)
-plt.scatter(3.622896E-12, (3.622896E-12 - 1.487646E-12) / 3.622896E-12, c="m", marker='s',
-            label='Gambier', zorder=2, s=50)
+            marker='s', label='(b)', zorder=2, s=50)
 plt.scatter(4.194141E-10, (4.194141E-10 - 3.555365E-10) / 4.194141E-10, c="y", marker='s',
-            label='Silica', zorder=2, s=50)
+            label='(c)', zorder=2, s=50)
+plt.scatter(3.622896E-12, (3.622896E-12 - 1.487646E-12) / 3.622896E-12, c="m", marker='s',
+            label='(d)', zorder=2, s=50)
 
-plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3, ncol=3, mode="expand",
-           borderaxespad=0., fancybox=True, framealpha=1)
+plt.legend(loc=3, ncol=2)
 
 plt.xscale("log")
 
-plt.savefig('out/error_rel.eps', format="eps", bbox_inches='tight')
+plt.savefig('../out/error_rel.eps', format="eps", bbox_inches='tight')
 
 plt.show()

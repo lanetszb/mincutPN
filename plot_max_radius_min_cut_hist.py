@@ -1,5 +1,8 @@
 import matplotlib.pyplot as plt
 import numpy as np
+from matplotlib import rc
+
+rc('text', usetex=True)
 
 bead_pack = np.loadtxt('out/bead_pack_512_min_cut_radii.txt') * 1.e+6
 bead_pack_max_radius = np.loadtxt('out/bead_pack_512_max_radius.txt') * 1.e+6
@@ -13,7 +16,7 @@ gambier_max_radius = np.loadtxt('out/gambier_512_max_radius.txt') * 1.e+6
 lrc32 = np.loadtxt('out/lrc32_512_min_cut_radii.txt') * 1.e+6
 lrc32_max_radius = np.loadtxt('out/lrc32_512_max_radius.txt') * 1.e+6
 
-fig_width = 4.5
+fig_width = 3.5
 fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(nrows=2, ncols=2,
                                              figsize=(fig_width, fig_width),
                                              tight_layout=True)

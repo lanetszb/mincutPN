@@ -74,6 +74,8 @@ def calculate_perm(net, pn_name='pn'):
     print("K_pnm", K_pnm)
     print("Q_pnm", Q_pnm)
 
+    print(flow)
+
     # Save PN data into VTK file
     # prj = pn.project
     # prj.export_data(filename=pn_name, filetype='vtk')
