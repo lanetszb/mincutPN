@@ -74,9 +74,7 @@ def calculate_perm(net, pn_name='pn'):
     print("K_pnm", K_pnm)
     print("Q_pnm", Q_pnm)
 
-    # Save PN data into VTK file
-    # prj = pn.project
-    # prj.export_data(filename=pn_name, filetype='vtk')
+
     # Save PN data into CSV file
     # op.io.CSV.save(pn, filename=pn_name)
 
@@ -93,6 +91,19 @@ def calculate_perm(net, pn_name='pn'):
 
     R, min_cut_edges_id, min_cut_radii = calculate_edmonds_karp(pores, throats, viscosity,
                                                                 A, dP, L)
+
+    # finding which throats in pn correspond to min_cuts
+    throats_id = np.arange(len(pn['throat.conns']))
+
+    min_cut_radii = np.array(min_cut_radii)
+    min_cuts_in_net = np.in1d(throats_id, min_cut_edges_id)
+    min_cuts_in_net = min_cuts_in_net * 1
+
+    pn['throat.min_cuts_in_net'] = min_cuts_in_net
+
+    # Save PN data into VTK file
+    prj = pn.project
+    prj.export_data(filename=pn_name, filetype='vtk')
 
     K_edm = R['in_a']['in_b']['flow'] / A
     Q_edm = R['in_a']['in_b']['flow'] * dP / L / viscosity

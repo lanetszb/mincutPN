@@ -9,6 +9,5 @@ sys.path.append(os.path.join(current_path, '../tmp/pmeal/porespy/'))
 import openpnm as op
 from functions.calculate_perm import calculate_perm
 
-flow_params, min_cut_edges_id = calculate_perm(op.io.Dict.load('out/gambier_512.net'),
-                                               'out/gambier_512')
-
+flow_params, min_cut_edges_id, min_cut_radii = calculate_perm(op.io.Dict.load('out/castle_512.net'),
+                                                'out/castle_512')
