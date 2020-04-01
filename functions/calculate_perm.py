@@ -15,6 +15,8 @@ import numpy as np
 
 
 def calculate_perm(net, pn_name='pn'):
+    print(pn_name, '\n')
+
     # net can be loaded as op.io.Dict.load(net_name)
 
     # Creating network dictionary which stores the required properties
@@ -82,6 +84,20 @@ def calculate_perm(net, pn_name='pn'):
         delta_presses.append(abs(presses[pores[0]] - presses[pores[1]]))
     pn['throat.velocity'] = np.array(delta_presses) * conducts / arias
 
+    # finding energy loss in whole-network
+    water_density = 1000
+    friction_const = 32 * pn['throat.length'] * viscosity / pn['throat.diameter'] ** 2 / water_density
+    # friction_const = 32 * viscosity / pn['throat.diameter'] / water_density
+
+    energy_loss_throats_net = friction_const * pn['throat.velocity'] ** 2
+    energy_loss_throats_av_net = np.sum(energy_loss_throats_net * pn['throat.length']) / np.sum(pn['throat.length'])
+
+    throats_av_length = np.mean(pn['throat.length'])
+    energy_loss_throats_av_length_net = energy_loss_throats_av_net / throats_av_length
+
+    print('energy_loss_throats_av_net', '{:.4e}'.format(energy_loss_throats_av_net))
+    print('energy_loss_throats_av_length_net', '{:.4e}'.format(energy_loss_throats_av_length_net))
+
     # Save PN data into VTK file
     # prj = pn.project
     # prj.export_data(filename=pn_name, filetype='vtk')
@@ -109,6 +125,21 @@ def calculate_perm(net, pn_name='pn'):
     min_cuts_in_net = min_cuts_in_net * 1
 
     pn['throat.min_cuts_in_net'] = min_cuts_in_net
+
+    # finding av length of min-cuts
+    mincut_lengths = pn['throat.length'] * min_cuts_in_net
+    mincut_lengths = mincut_lengths[mincut_lengths != 0]
+    mincut_av_length = np.mean(mincut_lengths)
+
+    # finding energy loss in min-cuts
+    energy_loss_mincut = energy_loss_throats_net * min_cuts_in_net
+    energy_loss_mincut = energy_loss_mincut[energy_loss_mincut != 0]
+
+    energy_loss_throats_av_mincut = np.sum(energy_loss_mincut * mincut_lengths) / np.sum(mincut_lengths)
+    energy_loss_throats_av_length_mincut = energy_loss_throats_av_mincut / mincut_av_length
+
+    print('energy_loss_throats_av_mincut', '{:.4e}'.format(energy_loss_throats_av_mincut))
+    print('energy_loss_throats_av_length_mincut', '{:.4e}'.format(energy_loss_throats_av_length_mincut))
 
     # Save PN data into VTK file
     prj = pn.project
