@@ -9,4 +9,5 @@ sys.path.append(os.path.join(current_path, '../tmp/pmeal/porespy/'))
 import openpnm as op
 from functions.calculate_perm import calculate_perm
 
-flow_params, min_cut = calculate_perm(op.io.Dict.load('out/uncons_bead_pack.net'), 'out/uncons_bead_pack')
+flow_params, min_cut = calculate_perm(op.io.Dict.load('out/uncons_bead_pack.net'),
+                                      'out/uncons_bead_pack')

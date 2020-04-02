@@ -10,6 +10,7 @@ import numpy as np
 from extract_pn import read_raw_file
 from extract_pn import extract_pn
 from functions.calculate_perm import calculate_perm
+# calculate_max_radius is module from our max_radius python project
 from calculate_max_radius import calculate_max_radius
 
 hdm_file_names = ['bead_pack_512.mhd', 'castle_512.mhd',

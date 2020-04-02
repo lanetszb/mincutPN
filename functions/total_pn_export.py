@@ -2,6 +2,8 @@ import numpy as np
 import pandas as pd
 
 
+# Export PN and min-cut data
+
 def total_pn_export(pore_network, key_left, key_right, save_to_csv=False, name='sample'):
     pores = pd.DataFrame(columns=['id', 'x', 'y', 'z', 'left', 'right'])
     pores.id = np.arange(len(pore_network['pore.coords']))
@@ -14,9 +16,8 @@ def total_pn_export(pore_network, key_left, key_right, save_to_csv=False, name='
     if save_to_csv:
         pores.to_csv(name + '_pores.csv', index=False)
 
-    throats = pd.DataFrame(
-        columns=['id', 'pore_a', 'pore_b', 'conductance', 'length', 'radius',
-                 'velocity', 'min_cuts_in_net'])
+    throats = pd.DataFrame(columns=['id', 'pore_a', 'pore_b', 'conductance',
+                                    'length', 'radius', 'velocity', 'min_cuts_in_net'])
     throats.id = np.arange(len(pore_network['throat.conns']))
     throats.pore_a = pore_network['throat.conns'][:, 0]
     throats.pore_b = pore_network['throat.conns'][:, 1]

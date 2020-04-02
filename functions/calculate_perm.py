@@ -14,9 +14,8 @@ from functions.edmonds_karp import calculate_edmonds_karp
 import numpy as np
 
 
+# calculate absolute permeability using PNM end max-flow
 def calculate_perm(net, pn_name='pn'):
-    print(pn_name, '\n')
-
     # net can be loaded as op.io.Dict.load(net_name)
 
     # Creating network dictionary which stores the required properties
@@ -59,23 +58,23 @@ def calculate_perm(net, pn_name='pn'):
     # Calculate flow length
     Lx = np.amax(pn['pore.coords'][:, 0]) - np.amin(pn['pore.coords'][:, 0])
     L = Lx
-    # since the network is cubic Lx = Ly = Lz
-    A = Lx * Lx
+    A = Lx * Lx  # since the network is cubic Lx = Ly = Lz
 
-    # Add pore pressure to output csv file
+    # Add pore pressure to PN dict
     pn['pore.pressure'] = flow['pore.pressure']
 
-    # Add hydraulic conductance to output csv filr
+    # Add hydraulic conductance to PN dict
     pn['throat.hydraulic_conductance'] = water['throat.hydraulic_conductance']
 
     # Calc total flow rate
     Q_pnm = flow.rate(pores=pn.pores('left'))[0]
 
-    # Calc permeability and output permeability and flow rate using PNM
+    # Calc permeability and output flow rate using PNM
     K_pnm = flow.calc_effective_permeability(domain_area=A, domain_length=Lx)[0]
     print("K_pnm", K_pnm)
     print("Q_pnm", Q_pnm)
 
+    # Add throat velocities to PN dict
     arias = pn['throat.diameter'] * pn['throat.diameter'] / 4
     presses = flow['pore.pressure']
     conducts = pn['throat.hydraulic_conductance']
@@ -86,17 +85,18 @@ def calculate_perm(net, pn_name='pn'):
 
     # finding energy loss in whole-network
     water_density = 1000
-    friction_const = 32 * pn['throat.length'] * viscosity / pn['throat.diameter'] ** 2 / water_density
+    friction_const = 32 * pn['throat.length'] * viscosity / pn[
+        'throat.diameter'] ** 2 / water_density
     # friction_const = 32 * viscosity / pn['throat.diameter'] / water_density
-
     energy_loss_throats_net = friction_const * pn['throat.velocity'] ** 2
-    energy_loss_throats_av_net = np.sum(energy_loss_throats_net * pn['throat.length']) / np.sum(pn['throat.length'])
-
+    energy_loss_throats_av_net = np.sum(
+        energy_loss_throats_net * pn['throat.length']) / np.sum(pn['throat.length'])
     throats_av_length = np.mean(pn['throat.length'])
     energy_loss_throats_av_length_net = energy_loss_throats_av_net / throats_av_length
 
     print('energy_loss_throats_av_net', '{:.4e}'.format(energy_loss_throats_av_net))
-    print('energy_loss_throats_av_length_net', '{:.4e}'.format(energy_loss_throats_av_length_net))
+    print('energy_loss_throats_av_length_net',
+          '{:.4e}'.format(energy_loss_throats_av_length_net))
 
     # Save PN data into VTK file
     # prj = pn.project
@@ -108,22 +108,18 @@ def calculate_perm(net, pn_name='pn'):
     # Find coeffs for paraview draw and output it to file
     throat_radius_min = min(pn['throat.diameter'] / 2)
     max_min_ratio = max(pn['throat.diameter']) / min(pn['throat.diameter'])
-
     with open('visualization/paraview_params.txt', 'w') as file:
         file.write(str(throat_radius_min) + '\n')
         file.write(str(max_min_ratio) + '\n')
 
-    pores, throats = edmonds_karp_export(pn, water, key_left, key_right,
-                                         save_to_csv=False)
-
+    # Provide Edmonds-Karp algorithm
+    pores, throats = edmonds_karp_export(pn, water, key_left, key_right)
     R, min_cut = calculate_edmonds_karp(pores, throats, viscosity, A, dP, L)
 
     # finding which throats in pn correspond to min_cuts
     throats_id = np.arange(len(pn['throat.conns']))
-
     min_cuts_in_net = np.in1d(throats_id, min_cut['id'])
     min_cuts_in_net = min_cuts_in_net * 1
-
     pn['throat.min_cuts_in_net'] = min_cuts_in_net
 
     # finding av length of min-cuts
@@ -135,11 +131,13 @@ def calculate_perm(net, pn_name='pn'):
     energy_loss_mincut = energy_loss_throats_net * min_cuts_in_net
     energy_loss_mincut = energy_loss_mincut[energy_loss_mincut != 0]
 
-    energy_loss_throats_av_mincut = np.sum(energy_loss_mincut * mincut_lengths) / np.sum(mincut_lengths)
+    energy_loss_throats_av_mincut = np.sum(energy_loss_mincut * mincut_lengths) / np.sum(
+        mincut_lengths)
     energy_loss_throats_av_length_mincut = energy_loss_throats_av_mincut / mincut_av_length
 
     print('energy_loss_throats_av_mincut', '{:.4e}'.format(energy_loss_throats_av_mincut))
-    print('energy_loss_throats_av_length_mincut', '{:.4e}'.format(energy_loss_throats_av_length_mincut))
+    print('energy_loss_throats_av_length_mincut',
+          '{:.4e}'.format(energy_loss_throats_av_length_mincut))
 
     # Save PN data into VTK file
     prj = pn.project
