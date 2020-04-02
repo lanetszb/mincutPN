@@ -41,8 +41,8 @@ k_max = 5.e-10
 ax1.set_xlim(k_min, k_max)
 ax1.set_ylim(k_min, k_max)
 
-ax1.set_xlabel('$k_{pnm}, m^2$')
-ax1.set_ylabel('$k_{edm}, m^2$')
+ax1.set_xlabel('$K_{pnm}, m^2$')
+ax1.set_ylabel('$K_{edm}, m^2$')
 
 plt.gca().set_aspect('equal', adjustable='box')
 plt.plot([k_min, k_max], [k_min, k_max], label='diagonal')
@@ -74,7 +74,7 @@ plt.plot([k_min, k_max], [mean_err, mean_err], label='average')
 ax2.set_xlim(k_min, k_max)
 ax2.set_ylim(-1, 1)
 
-ax2.set_xlabel('$k_{pnm}, m^2$')
+ax2.set_xlabel('$K_{pnm}, m^2$')
 ax2.set_ylabel('Relative error')
 
 plt.scatter(1.067776E-11, (1.067776E-11 - 1.013048E-11) / 1.067776E-11, c="r", marker='s',

@@ -4,17 +4,17 @@ from matplotlib import rc
 
 rc('text', usetex=True)
 
-bead_pack = np.loadtxt('out/bead_pack_512_min_cut_radii.txt') * 1.e+6
-bead_pack_max_radius = np.loadtxt('out/bead_pack_512_max_radius.txt') * 1.e+6
+bead_pack = np.loadtxt('../out/bead_pack_512_min_cut_radii.txt') * 1.e+6
+bead_pack_max_radius = np.loadtxt('../out/bead_pack_512_max_radius.txt') * 1.e+6
 
-castle = np.loadtxt('out/castle_512_min_cut_radii.txt') * 1.e+6
-castle_max_radius = np.loadtxt('out/castle_512_max_radius.txt') * 1.e+6
+castle = np.loadtxt('../out/castle_512_min_cut_radii.txt') * 1.e+6
+castle_max_radius = np.loadtxt('../out/castle_512_max_radius.txt') * 1.e+6
 
-gambier = np.loadtxt('out/gambier_512_min_cut_radii.txt') * 1.e+6
-gambier_max_radius = np.loadtxt('out/gambier_512_max_radius.txt') * 1.e+6
+gambier = np.loadtxt('../out/gambier_512_min_cut_radii.txt') * 1.e+6
+gambier_max_radius = np.loadtxt('../out/gambier_512_max_radius.txt') * 1.e+6
 
-lrc32 = np.loadtxt('out/lrc32_512_min_cut_radii.txt') * 1.e+6
-lrc32_max_radius = np.loadtxt('out/lrc32_512_max_radius.txt') * 1.e+6
+lrc32 = np.loadtxt('../out/lrc32_512_min_cut_radii.txt') * 1.e+6
+lrc32_max_radius = np.loadtxt('../out/lrc32_512_max_radius.txt') * 1.e+6
 
 fig_width = 3.5
 fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(nrows=2, ncols=2,
@@ -55,6 +55,6 @@ fig.text(0.5, 0.005, 'throats (edges) radius, ' + r'$\mu$' + 'm', ha='center')
 handles, labels = ax1.get_legend_handles_labels()
 fig.legend(handles, labels, loc=(0.365, 0.47))
 
-plt.savefig('out/max_radius_min_cut_hist.eps', format='eps', bbox_inches='tight')
+plt.savefig('../out/max_radius_min_cut_hist.eps', format='eps', bbox_inches='tight')
 
 plt.show()
