@@ -9,6 +9,7 @@ sys.path.append(os.path.join(current_path, '../../tmp/pmeal/porespy/'))
 import openpnm as op
 
 from functions.edmonds_karp_export import edmonds_karp_export
+from functions.total_pn_export import total_pn_export
 from functions.edmonds_karp import calculate_edmonds_karp
 
 import numpy as np
@@ -147,5 +148,7 @@ def calculate_perm(net, pn_name='pn'):
     Q_edm = R['in_a']['in_b']['flow'] * dP / L / viscosity
 
     flow_params = np.array([K_pnm, Q_pnm, K_edm, Q_edm])
+
+    total_pn_export(pn, key_left, key_right, pn_name)
 
     return flow_params, min_cut
