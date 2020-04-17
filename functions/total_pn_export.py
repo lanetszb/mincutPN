@@ -4,7 +4,7 @@ import pandas as pd
 
 # Export PN and min-cut data
 
-def total_pn_export(pore_network, key_left, key_right, save_to_csv=True, name='sample'):
+def total_pn_export(pore_network, key_left, key_right, save_to_csv=False, name='sample'):
     pores = pd.DataFrame(columns=['id', 'x', 'y', 'z', 'left', 'right'])
     pores.id = np.arange(len(pore_network['pore.coords']))
     pores.x = pore_network['pore.coords'][:, 0]

@@ -141,14 +141,60 @@ def calculate_perm(net, pn_name='pn'):
           '{:.4e}'.format(energy_loss_throats_av_length_mincut))
 
     # Save PN data into VTK file
-    prj = pn.project
-    prj.export_data(filename=pn_name, filetype='vtk')
+    # prj = pn.project
+    # prj.export_data(filename=pn_name, filetype='vtk')
 
     K_edm = R['in_a']['in_b']['flow'] / A
     Q_edm = R['in_a']['in_b']['flow'] * dP / L / viscosity
 
     flow_params = np.array([K_pnm, Q_pnm, K_edm, Q_edm])
-
     total_pn_export(pn, key_left, key_right, pn_name)
 
-    return flow_params, min_cut
+
+    # Calculating pore connections
+
+    pore_list = np.arange(len(pn['pore.coords'])).tolist()
+
+    pore_conns = [[] for i in range(len(pore_list))]
+
+    for i in range(len(pore_list)):
+        for j in range(len(pn['throat.conns'])):
+            if i == pn['throat.conns'][j][0]:
+                pore_conns[i].append(pn['throat.conns'][j][1])
+            if i == pn['throat.conns'][j][1]:
+                pore_conns[i].append(pn['throat.conns'][j][0])
+
+    # Calculating connection number
+
+    conn_number = []
+
+    for i in range(len(pore_list)):
+        conn_number.append(len(pore_conns[i]))
+
+    conn_number = np.array(conn_number)
+
+    Dict = {}
+    Dict['K_pnm'] = K_pnm
+    Dict['Q_pnm'] = Q_pnm
+    Dict['K_edm'] = K_edm
+    Dict['Q_edm'] = Q_edm
+
+    por_rad_avg = np.average(pn['pore.diameter'][pn['pore.internal']] / 2)
+    por_rad_std = np.std(pn['pore.diameter'][pn['pore.internal']] / 2)
+    throat_rad_avg = np.average(pn['throat.diameter'][pn['throat.internal']] / 2)
+    throat_rad_std = np.std(pn['throat.diameter'][pn['throat.internal']] / 2)
+    throat_len_avg = np.average(pn['throat.length'][pn['throat.internal']])
+    throat_length_std = np.std(pn['throat.length'][pn['throat.internal']])
+    conn_num_avg = np.average(conn_number[pn['pore.internal']])
+    conn_num_std = np.std(conn_number[pn['pore.internal']])
+
+    Dict['por_rad_avg'] = por_rad_avg
+    Dict['por_rad_std'] = por_rad_std
+    Dict['thr_rad_avg'] = throat_rad_avg
+    Dict['thr_rad_std'] = throat_rad_std
+    Dict['thr_len_avg'] = throat_len_avg
+    Dict['thr_len_std'] = throat_length_std
+    Dict['conn_num_avg'] = conn_num_avg
+    Dict['conn_num_std'] = conn_num_std
+
+    return Dict, min_cut

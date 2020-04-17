@@ -13,14 +13,17 @@ from functions.calculate_perm import calculate_perm
 
 # This codel allows generating artificial PN model and calculate permeability
 
-with open('out/perm_comparison.csv', 'w') as file:
-    file.write('Porosity,' + 'K_pnm,' + 'Q_pnm,' + 'K_edm,' + 'Q_edm' + '\n')
+with open('out/plotting_data.csv', 'w') as file:
+    file.write('porosity,' + 'k_pnm,' + 'q_pnm,' + 'k_edm,' +
+               'q_edm,' + 'por_rad_avg,' + 'por_rad_std,' + 'thr_rad_avg,' +
+               'thr_rad_std,' + 'thr_len_avg,' + 'thr_len_std,' +
+               'conn_num_avg,' + 'conn_num_std' + '\n')
 
-    im_n = 1
+    im_n = 300
     i = 0
 
     dims = [200, 200, 200]
-    voxel_list = [1.E-5, 4.E-5]
+    voxel_list = [1.E-6, 5.E-6, 1.E-5, 4.E-5, 8.E-5]
 
     while True:
 
@@ -35,27 +38,31 @@ with open('out/perm_comparison.csv', 'w') as file:
                 break
 
             im = ps.generators.blobs(shape=dims, porosity=poro, blobiness=blob)
-            np.save(f'out/im_{i}', im)
+            # np.save(f'out/im_{i}', im)
             # plt.imshow(im[:, :, int(dims[0] / 2)])
             # plt.axis('off')
             # plt.show()
 
             # exporting generated image to VTK format
-            ps.io.to_vtk(im, path=f'out/im_{i}', divide=False,
-                         downsample=False, voxel_size=1E-6, vox=False)
+            # ps.io.to_vtk(im, path=f'out/im_{i}', divide=False,
+            #              downsample=False, voxel_size=1E-6, vox=False)
 
             # extract pore network using snow algorithm
             net = ps.networks.snow(im, voxel_size=voxel_size)
 
             # exporting pore network from generated image
-            ps.io.to_openpnm(net, filename=f'out/pn_{i}')
+            # ps.io.to_openpnm(net, filename=f'out/pn_{i}')
 
             # calculate permeability
-            flow_params, min_cut = calculate_perm(net, pn_name=f'out/pn_{i}')
+            Dict, min_cut = calculate_perm(net, pn_name=f'out/pn_{i}')
 
-            file.write(str(poro) + ',' + str(flow_params[0]) + ',' + str(
-                flow_params[1]) + ','
-                       + str(flow_params[2]) + ',' + str(flow_params[3]) + '\n')
+            file.write(str(poro) + ',' + str(Dict['K_pnm']) +
+                       ',' + str(Dict['Q_pnm']) + ',' + str(Dict['K_edm']) +
+                       ',' + str(Dict['Q_edm']) + ',' + str(Dict['por_rad_avg']) +
+                       ',' + str(Dict['por_rad_std']) + ',' + str(Dict['thr_rad_avg']) +
+                       ',' + str(Dict['thr_rad_std']) + ',' + str(Dict['thr_len_avg']) +
+                       ',' + str(Dict['thr_len_std']) + ',' + str(Dict['conn_num_avg']) +
+                       ',' + str(Dict['conn_num_std']) + '\n')
             print()
             print('i', i)
 
