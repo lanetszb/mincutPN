@@ -30,7 +30,7 @@ def implement_filter(table, threshold, remove_rate):
     return table.drop(drop_indices)
 
 
-df = implement_filter(df, 1.e-10, 0.6)
+# df = implement_filter(df, 1.e-10, 0.6)
 
 # Plot 1
 fig1, ax1 = plt.subplots(figsize=(fig_width, fig_width), tight_layout=True)

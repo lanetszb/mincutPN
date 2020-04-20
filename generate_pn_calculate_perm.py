@@ -17,7 +17,7 @@ with open('out/plotting_data.csv', 'w') as file:
     file.write('porosity,' + 'k_pnm,' + 'q_pnm,' + 'k_edm,' +
                'q_edm,' + 'radius_pore_avg,' + 'radius_pore_std,' + 'radius_throat_avg,' +
                'radius_throat_std,' + 'length_throat_avg,' + 'length_throat_std,' +
-               'connection_n_avg,' + 'connection_n_std,' + 'type' + '\n')
+               'connection_n_avg,' + 'connection_n_std,' + '\n')
 
     im_n = 1000
     i = 0
@@ -61,7 +61,7 @@ with open('out/plotting_data.csv', 'w') as file:
                        ',' + str(Dict['por_rad_std']) + ',' + str(Dict['thr_rad_avg']) +
                        ',' + str(Dict['thr_rad_std']) + ',' + str(Dict['thr_len_avg']) +
                        ',' + str(Dict['thr_len_std']) + ',' + str(Dict['conn_num_avg']) +
-                       ',' + str(Dict['conn_num_std']) + ',' + 'artificial' + '\n')
+                       ',' + str(Dict['conn_num_std']) + '\n')
             print()
             print('i', i)
 
