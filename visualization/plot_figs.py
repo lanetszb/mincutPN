@@ -7,17 +7,19 @@ sys.path.append(os.path.join(current_path, '../'))
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
+
 from matplotlib import rc
 
 rc('text', usetex=True)
 
 fig_width = 3.5
 
-table = pd.read_csv('../out/perm_comparison_1.csv')
+table = pd.read_csv('../out/plotting_data_for_analysis.csv')
 df = pd.DataFrame(table)
 
 df = df.sort_values(by=['k_pnm'])
 df.index = df.k_pnm
+df['error_rel'] = (df.k_edm - df.k_pnm) / df.k_pnm
 
 
 def implement_filter(table, threshold, remove_rate):
@@ -62,7 +64,6 @@ plt.savefig('../out/k_pnm_edm.eps', format="eps", bbox_inches='tight')
 plt.show()
 
 # Plot 2
-df['error_rel'] = (df.k_pnm - df.k_edm) / df.k_pnm
 
 fig2, ax2 = plt.subplots(figsize=(fig_width, fig_width), tight_layout=True)
 df.plot(x='k_pnm', y='error_rel', style='o', label='artificial', legend=False, ax=ax2,
@@ -77,16 +78,16 @@ ax2.set_ylim(-1, 1)
 ax2.set_xlabel('$K_{pnm}, m^2$')
 ax2.set_ylabel('Relative error')
 
-plt.scatter(1.067776E-11, (1.067776E-11 - 1.013048E-11) / 1.067776E-11, c="r", marker='s',
+plt.scatter(1.067776E-11, (1.013048E-11 - 1.067776E-11) / 1.067776E-11, c="r", marker='s',
             label='(a)', zorder=2, s=50)
-plt.scatter(2.298116E-13, (2.298116E-13 - 1.889883E-13) / 2.298116E-13, c="cyan",
+plt.scatter(2.298116E-13, (1.889883E-13 - 2.298116E-13) / 2.298116E-13, c="cyan",
             marker='s', label='(b)', zorder=2, s=50)
-plt.scatter(4.194141E-10, (4.194141E-10 - 3.555365E-10) / 4.194141E-10, c="y", marker='s',
+plt.scatter(4.194141E-10, (3.555365E-10 - 4.194141E-10) / 4.194141E-10, c="y", marker='s',
             label='(c)', zorder=2, s=50)
-plt.scatter(3.622896E-12, (3.622896E-12 - 1.487646E-12) / 3.622896E-12, c="m", marker='s',
+plt.scatter(3.622896E-12, (1.487646E-12 - 3.622896E-12) / 3.622896E-12, c="m", marker='s',
             label='(d)', zorder=2, s=50)
 
-plt.legend(loc=3, ncol=2)
+plt.legend(loc=2, ncol=2)
 
 plt.xscale("log")
 
