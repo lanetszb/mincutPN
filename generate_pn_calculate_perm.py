@@ -15,22 +15,21 @@ from functions.calculate_perm import calculate_perm
 
 with open('out/plotting_data.csv', 'w') as file:
     file.write('porosity,' + 'k_pnm,' + 'q_pnm,' + 'k_edm,' +
-               'q_edm,' + 'por_rad_avg,' + 'por_rad_std,' + 'thr_rad_avg,' +
-               'thr_rad_std,' + 'thr_len_avg,' + 'thr_len_std,' +
-               'conn_num_avg,' + 'conn_num_std' + '\n')
+               'q_edm,' + 'radius_pore_avg,' + 'radius_pore_std,' + 'radius_throat_avg,' +
+               'radius_throat_std,' + 'length_throat_avg,' + 'length_throat_std,' +
+               'connection_n_avg,' + 'connection_n_std,' + 'type' + '\n')
 
-    im_n = 300
+    im_n = 1000
     i = 0
 
     dims = [200, 200, 200]
-    voxel_list = [1.E-6, 5.E-6, 1.E-5, 4.E-5, 8.E-5]
 
     while True:
 
         # Random generator of porosity and blobiness based on gauss
-        poro = random.gauss(0.15, 0.45)
-        blob = random.gauss(0.6, 2.2)
-        voxel_size = random.choice(voxel_list)
+        poro = random.uniform(0.15, 0.45)
+        blob = random.uniform(0.6, 2.2)
+        voxel_size = random.uniform(1.E-6, 2.E-5)
 
         if 0.15 <= poro <= 0.35 and 0.6 <= blob <= 2.2:
 
@@ -62,7 +61,7 @@ with open('out/plotting_data.csv', 'w') as file:
                        ',' + str(Dict['por_rad_std']) + ',' + str(Dict['thr_rad_avg']) +
                        ',' + str(Dict['thr_rad_std']) + ',' + str(Dict['thr_len_avg']) +
                        ',' + str(Dict['thr_len_std']) + ',' + str(Dict['conn_num_avg']) +
-                       ',' + str(Dict['conn_num_std']) + '\n')
+                       ',' + str(Dict['conn_num_std']) + ',' + 'artificial' + '\n')
             print()
             print('i', i)
 
