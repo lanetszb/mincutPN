@@ -7,6 +7,8 @@ sys.path.append(os.path.join(current_path, '../'))
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
+import seaborn as sns
+from scipy import stats
 
 from matplotlib import rc
 
@@ -93,4 +95,21 @@ plt.xscale("log")
 
 plt.savefig('../out/error_rel.eps', format="eps", bbox_inches='tight')
 
+plt.show()
+
+# Plot 3
+
+fig3, ax3 = plt.subplots(figsize=(fig_width, fig_width), tight_layout=True)
+sns.regplot(x='connection_n_avg', y='error_rel', data=df, ax=ax3,
+            line_kws={"color": "#ff7f0e"})
+R2 = round(stats.pearsonr(df['connection_n_avg'], df['error_rel'])[0] ** 2, 3)
+plt.ylim(-0.84, 0.32)
+plt.text(0.75, 0.25, '$R^2$ = ' + str(R2), ha='center', va='center',
+         transform=ax3.transAxes)
+xlim = ax3.get_xlim()
+plt.plot(xlim, [0, 0], color='black', linewidth=0.5, zorder=0)
+plt.xlim(xlim)
+ax3.set_xlabel('Coordination number')
+ax3.set_ylabel('Relative error')
+plt.savefig('../out/error_rel_vs_connection_n_avg.eps', format="eps", bbox_inches='tight')
 plt.show()
