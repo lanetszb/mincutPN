@@ -15,4 +15,8 @@ __pycache__/
 *.npy
 .idea
 
+*.dat
+*.mat
+*.mhd
+
 out
