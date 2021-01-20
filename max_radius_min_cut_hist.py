@@ -3,8 +3,8 @@ import os
 
 current_path = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.join(current_path, '../max_radius'))
-sys.path.append(os.path.join(current_path, '../tmp/pmeal/OpenPNM/'))
-sys.path.append(os.path.join(current_path, '../tmp/pmeal/porespy/'))
+sys.path.append(os.path.join(current_path, '../../tmp/pmeal/OpenPNM/'))
+sys.path.append(os.path.join(current_path, '../../tmp/pmeal/porespy/'))
 
 import numpy as np
 from extract_pn import read_raw_file
@@ -13,8 +13,7 @@ from functions.calculate_perm import calculate_perm
 # calculate_max_radius is module from our max_radius python project
 from calculate_max_radius import calculate_max_radius
 
-hdm_file_names = ['bead_pack_512.mhd', 'castle_512.mhd',
-                  'gambier_512.mhd', 'lrc32_512.mhd']
+hdm_file_names = ['bead_pack_512.mhd']
 
 base_path_in = 'samples'
 base_path_out = 'out'

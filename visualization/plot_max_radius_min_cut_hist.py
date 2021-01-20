@@ -56,9 +56,9 @@ ax4.plot(x4, y4, lw=4)
 ax4.set_title('(d)')
 ax4.set_ylim(y4 * 1)
 
-fig.text(-0.02, 0.5, 'throats (edges) number', va='center', rotation='vertical')
-fig.text(0.99, 0.5, 'throats (edges) cumulative distribution', va='center', rotation='vertical')
-fig.text(0.5, 0.075, 'throats (edges) radius, ' + r'$\mu$' + 'm', ha='center')
+fig.text(-0.02, 0.5, 'throats number', va='center', rotation='vertical')
+fig.text(0.99, 0.5, 'throats cumulative distribution', va='center', rotation='vertical')
+fig.text(0.5, 0.075, 'throats radius, ' + r'$\mu m$', ha='center')
 
 
 

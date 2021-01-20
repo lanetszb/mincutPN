@@ -148,7 +148,7 @@ def calculate_perm(net, pn_name='pn'):
     Q_edm = R['in_a']['in_b']['flow'] * dP / L / viscosity
 
     flow_params = np.array([K_pnm, Q_pnm, K_edm, Q_edm])
-    total_pn_export(pn, key_left, key_right, pn_name)
+    # total_pn_export(pn, key_left, key_right, pn_name)
 
 
     # Calculating pore connections
