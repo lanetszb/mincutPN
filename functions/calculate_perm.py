@@ -86,22 +86,20 @@ def calculate_perm(net, pn_name='pn'):
 
     # finding energy loss in whole-network
     water_density = 1000
-    friction_const = 32 * pn['throat.length'] * viscosity / pn[
-        'throat.diameter'] ** 2 / water_density
+    friction_const = 32 * pn['throat.total_length'] * viscosity / pn['throat.diameter'] ** 2 / water_density
     # friction_const = 32 * viscosity / pn['throat.diameter'] / water_density
     energy_loss_throats_net = friction_const * pn['throat.velocity'] ** 2
-    energy_loss_throats_av_net = np.sum(
-        energy_loss_throats_net * pn['throat.length']) / np.sum(pn['throat.length'])
-    throats_av_length = np.mean(pn['throat.length'])
+    energy_loss_throats_av_net = np.sum(energy_loss_throats_net * pn['throat.total_length']) / np.sum(
+        pn['throat.total_length'])
+    pn['throat.energy_loss'] = energy_loss_throats_net
+    pn['throat.energy_loss_by_length'] = energy_loss_throats_net / pn['throat.total_length']
+
+    throats_av_length = np.mean(pn['throat.total_length'])
     energy_loss_throats_av_length_net = energy_loss_throats_av_net / throats_av_length
 
     print('energy_loss_throats_av_net', '{:.4e}'.format(energy_loss_throats_av_net))
     print('energy_loss_throats_av_length_net',
           '{:.4e}'.format(energy_loss_throats_av_length_net))
-
-    # Save PN data into VTK file
-    # prj = pn.project
-    # prj.export_data(filename=pn_name, filetype='vtk')
 
     # Save PN data into CSV file
     # op.io.CSV.save(pn, filename=pn_name)
@@ -113,9 +111,22 @@ def calculate_perm(net, pn_name='pn'):
         file.write(str(throat_radius_min) + '\n')
         file.write(str(max_min_ratio) + '\n')
 
+    # throat n
+    print('throat_n: ', len(pn['throat.total_length']))
+
     # Provide Edmonds-Karp algorithm
     pores, throats = edmonds_karp_export(pn, water, key_left, key_right)
     R, min_cut = calculate_edmonds_karp(pores, throats, viscosity, A, dP, L)
+
+    # Visualisation scaling
+    pn['throat.visual'] = np.empty(len(pn['throat.diameter']))
+    pn['throat.visual'].fill(1.E-9)
+    for value in min_cut['id'].to_numpy():
+        pn['throat.visual'][value] = pn['throat.diameter'][value]
+
+    # Save PN data into VTK file
+    prj = pn.project
+    prj.export_data(filename=pn_name, filetype='vtk')
 
     # finding which throats in pn correspond to min_cuts
     throats_id = np.arange(len(pn['throat.conns']))
@@ -124,7 +135,7 @@ def calculate_perm(net, pn_name='pn'):
     pn['throat.min_cuts_in_net'] = min_cuts_in_net
 
     # finding av length of min-cuts
-    mincut_lengths = pn['throat.length'] * min_cuts_in_net
+    mincut_lengths = pn['throat.total_length'] * min_cuts_in_net
     mincut_lengths = mincut_lengths[mincut_lengths != 0]
     mincut_av_length = np.mean(mincut_lengths)
 
@@ -137,19 +148,20 @@ def calculate_perm(net, pn_name='pn'):
     energy_loss_throats_av_length_mincut = energy_loss_throats_av_mincut / mincut_av_length
 
     print('energy_loss_throats_av_mincut', '{:.4e}'.format(energy_loss_throats_av_mincut))
-    print('energy_loss_throats_av_length_mincut',
+    print('energ_loss_throats_av_length_mincut',
           '{:.4e}'.format(energy_loss_throats_av_length_mincut))
+    print('deviation_energy_loss_throats_av', energy_loss_throats_av_mincut / energy_loss_throats_av_net)
+    print('deviation_energy_loss_throats_av_length',
+          energy_loss_throats_av_length_mincut / energy_loss_throats_av_length_net)
 
     # Save PN data into VTK file
     # prj = pn.project
     # prj.export_data(filename=pn_name, filetype='vtk')
-
     K_edm = R['in_a']['in_b']['flow'] / A
     Q_edm = R['in_a']['in_b']['flow'] * dP / L / viscosity
 
     flow_params = np.array([K_pnm, Q_pnm, K_edm, Q_edm])
-    total_pn_export(pn, key_left, key_right, pn_name)
-
+    # total_pn_export(pn, key_left, key_right, pn_name)
 
     # Calculating pore connections
 
@@ -183,8 +195,8 @@ def calculate_perm(net, pn_name='pn'):
     por_rad_std = np.std(pn['pore.diameter'][pn['pore.internal']] / 2)
     throat_rad_avg = np.average(pn['throat.diameter'][pn['throat.internal']] / 2)
     throat_rad_std = np.std(pn['throat.diameter'][pn['throat.internal']] / 2)
-    throat_len_avg = np.average(pn['throat.length'][pn['throat.internal']])
-    throat_length_std = np.std(pn['throat.length'][pn['throat.internal']])
+    throat_len_avg = np.average(pn['throat.total_length'][pn['throat.internal']])
+    throat_length_std = np.std(pn['throat.total_length'][pn['throat.internal']])
     conn_num_avg = np.average(conn_number[pn['pore.internal']])
     conn_num_std = np.std(conn_number[pn['pore.internal']])
 
