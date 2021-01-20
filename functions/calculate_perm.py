@@ -163,6 +163,7 @@ def calculate_perm(net, pn_name='pn'):
     flow_params = np.array([K_pnm, Q_pnm, K_edm, Q_edm])
     # total_pn_export(pn, key_left, key_right, pn_name)
 
+
     # Calculating pore connections
 
     pore_list = np.arange(len(pn['pore.coords'])).tolist()
