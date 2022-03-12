@@ -15,7 +15,7 @@ networkx==2.4
 numba==0.47.0
 numpy==1.18.1
 pandas==0.25.3
-Pillow==7.0.0
+Pillow==9.0.1
 pyparsing==2.4.6
 PyQt5==5.14.0
 PyQt5-sip==4.19.20
